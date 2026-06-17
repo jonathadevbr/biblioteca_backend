@@ -1,4 +1,4 @@
-package com.jonatha.biblioteca.enums;
+package com.jonatha.biblioteca.biblioteca_backend.enums;
 
 public enum StatusEmprestimo {
     ATIVO(1),

@@ -3,7 +3,7 @@ package com.jonatha.biblioteca.biblioteca_backend.model;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import com.jonatha.biblioteca.enums.StatusEmprestimo;
+import com.jonatha.biblioteca.biblioteca_backend.enums.StatusEmprestimo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
