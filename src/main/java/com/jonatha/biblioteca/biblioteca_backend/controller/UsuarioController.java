@@ -9,6 +9,8 @@ import com.jonatha.biblioteca.biblioteca_backend.service.UsuarioService;
 
 import jakarta.validation.Valid;
 
+import java.util.UUID;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -42,6 +44,12 @@ public class UsuarioController {
     public UsuarioResponseDTO createUsuarioController(@Valid @RequestBody UsuarioRequestDTO request) {
         return usuarioService.createUsuarioService(request);
     }
+
+    @GetMapping("/{id}")
+    public UsuarioResponseDTO getUsuarioController(@RequestParam UUID id) {
+        return usuarioService.getUsuarioService(id);
+    }
+    
     
     
 }
