@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 
@@ -50,6 +53,9 @@ public class UsuarioController {
         return usuarioService.getUsuarioService(id);
     }
     
-    
+    @PutMapping("/{id}")
+    public UsuarioResponseDTO updateUsuarioController(@PathVariable UUID id, @Valid @RequestBody UsuarioRequestDTO request) {
+        return usuarioService.updateUsuarioService(id, request);
+    }
     
 }

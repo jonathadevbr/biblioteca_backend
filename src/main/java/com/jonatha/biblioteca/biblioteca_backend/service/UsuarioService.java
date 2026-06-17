@@ -14,6 +14,7 @@ import com.jonatha.biblioteca.biblioteca_backend.repository.UsuarioRepository;
 
 @Service
 public class UsuarioService {
+
     private final UsuarioRepository repository;
 
     public UsuarioService(UsuarioRepository repository) {
@@ -36,5 +37,16 @@ public class UsuarioService {
             .orElseThrow(() -> new NotFoundException("Usuário não encontrado no sistema."));
 
         return new UsuarioResponseDTO(usuario);
+    }
+
+    public UsuarioResponseDTO updateUsuarioService(UUID id, UsuarioRequestDTO request) {
+        Usuario usuario = repository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Usuário não encontrado no sistema."));
+
+        request.updateUsuario(usuario);
+        usuario = repository.save(usuario);
+
+        return new UsuarioResponseDTO(usuario);
+    
     }
 }
