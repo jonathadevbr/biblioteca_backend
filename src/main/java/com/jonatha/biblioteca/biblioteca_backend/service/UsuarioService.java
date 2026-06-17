@@ -49,4 +49,11 @@ public class UsuarioService {
         return new UsuarioResponseDTO(usuario);
     
     }
+
+    public void deleteUsuarioService(UUID id) {
+        Usuario usuario = repository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Usuário não encontrado no sistema."));
+
+        repository.delete(usuario);
+    }
 }

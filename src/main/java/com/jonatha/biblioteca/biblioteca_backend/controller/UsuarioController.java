@@ -14,6 +14,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -49,13 +50,22 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public UsuarioResponseDTO getUsuarioController(@RequestParam UUID id) {
         return usuarioService.getUsuarioService(id);
     }
     
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public UsuarioResponseDTO updateUsuarioController(@PathVariable UUID id, @Valid @RequestBody UsuarioRequestDTO request) {
         return usuarioService.updateUsuarioService(id, request);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUsuarioController(@PathVariable UUID id) {
+        usuarioService.deleteUsuarioService(id);
+    }
+
     
 }
