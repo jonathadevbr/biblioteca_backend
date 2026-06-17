@@ -34,6 +34,10 @@ public class Livro {
     @JoinColumn(name = "autor_id", nullable = false)
     private Autor autor;
 
+    @ManyToOne
+    @JoinColumn(name = "categoria_id", nullable = false)
+    private Categoria categoria;
+
     @Column(name = "isbn", nullable = false, unique = true)
     private String isbn;
 
