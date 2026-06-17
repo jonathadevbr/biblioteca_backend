@@ -3,7 +3,7 @@ package com.jonatha.biblioteca.biblioteca_backend.model;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import com.jonatha.biblioteca.enums.StatusEmpretimos;
+import com.jonatha.biblioteca.enums.StatusEmprestimo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,5 +51,5 @@ public class Emprestimo {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private StatusEmpretimos status;
+    private StatusEmprestimo status;
 }

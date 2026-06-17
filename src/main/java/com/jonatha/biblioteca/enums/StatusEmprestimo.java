@@ -1,6 +1,6 @@
 package com.jonatha.biblioteca.enums;
 
-public enum StatusEmpretimos {
+public enum StatusEmprestimo {
     ATIVO(1),
     RENOVADO(2),
     EM_ATRASO(3),
@@ -8,7 +8,7 @@ public enum StatusEmpretimos {
 
     private final int valor;
 
-    StatusEmpretimos(int valor) {
+    StatusEmprestimo(int valor) {
         this.valor = valor;
     }
 
@@ -16,8 +16,8 @@ public enum StatusEmpretimos {
         return valor;
     }
 
-    public static StatusEmpretimos fromValor(Integer valor) {
-        for (StatusEmpretimos tipo : values()) {
+    public static StatusEmprestimo fromValor(Integer valor) {
+        for (StatusEmprestimo tipo : values()) {
             if (tipo.valor == valor) {
                 return tipo;
             }

@@ -28,8 +28,8 @@ public class Usuario {
     @Column(name = "nome", nullable = false)
     private String nome;
 
-    @Column(name = "matricula", nullable = false)
-    private Integer matricula;
+    @Column(name = "cpf", nullable = false)
+    private String cpf;
 
     @Column(name = "email", nullable = false)
     private String email;
