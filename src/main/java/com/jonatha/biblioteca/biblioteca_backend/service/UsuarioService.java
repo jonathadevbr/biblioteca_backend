@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.UsuarioRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.response.UsuarioResponseDTO;
+import com.jonatha.biblioteca.biblioteca_backend.exception.ConflictException;
 import com.jonatha.biblioteca.biblioteca_backend.exception.NotFoundException;
 import com.jonatha.biblioteca.biblioteca_backend.model.Usuario;
 import com.jonatha.biblioteca.biblioteca_backend.repository.UsuarioRepository;
@@ -26,6 +27,15 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDTO createUsuarioService(UsuarioRequestDTO request) {
+
+        if (repository.existsByCpf(request.cpf())) {
+            throw new ConflictException("CPF já cadastrado.");
+        }
+
+        if (repository.existsByEmail(request.email())) {
+            throw new ConflictException("Email já cadastrado.");
+        }
+
         Usuario usuario = request.createUsuario();
 
         usuario = repository.save(usuario);
@@ -42,6 +52,14 @@ public class UsuarioService {
     public UsuarioResponseDTO updateUsuarioService(UUID id, UsuarioRequestDTO request) {
         Usuario usuario = repository.findById(id)
             .orElseThrow(() -> new NotFoundException("Usuário não encontrado no sistema."));
+
+        if (repository.existsByCpfAndIdNot(request.cpf(), id)) {
+            throw new ConflictException("CPF já cadastrado.");
+        }
+
+        if (repository.existsByCpfAndIdNot(request.email(), id)) {
+            throw new ConflictException("Email já cadastrado.");
+        }
 
         request.updateUsuario(usuario);
         usuario = repository.save(usuario);

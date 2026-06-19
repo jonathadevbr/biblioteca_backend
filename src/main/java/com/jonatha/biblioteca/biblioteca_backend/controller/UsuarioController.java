@@ -23,9 +23,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-
-
-
 @RestController
 @RequestMapping("/v2/api/usuario")
 public class UsuarioController {
@@ -51,7 +48,7 @@ public class UsuarioController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UsuarioResponseDTO getUsuarioController(@RequestParam UUID id) {
+    public UsuarioResponseDTO getUsuarioController(@PathVariable UUID id) {
         return usuarioService.getUsuarioService(id);
     }
     

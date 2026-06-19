@@ -25,15 +25,15 @@ public class Usuario {
     @Column(name = "id_usuario", nullable = false, updatable = false)
     private UUID id;
 
-    @Column(name = "nome", nullable = false)
+    @Column(name = "nome", nullable = false, length = 100)
     private String nome;
 
-    @Column(name = "cpf", nullable = false, unique = true)
+    @Column(name = "cpf", nullable = false, unique = true, length = 11)
     private String cpf;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true, length = 150)
     private String email;
 
-    @Column(name = "celular", nullable = false)
+    @Column(name = "celular", nullable = false, length = 11)
     private String celular;
 }

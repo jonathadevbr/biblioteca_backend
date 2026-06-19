@@ -7,5 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.jonatha.biblioteca.biblioteca_backend.model.Usuario;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, UUID>{
-   
+   boolean existsByCpf(String cpf);
+   boolean existsByEmail(String email);
+
+   boolean existsByCpfAndIdNot(String cpf, UUID id);
+   boolean existsByEmailAndIdNot(String email, UUID id);
 }
