@@ -27,8 +27,9 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDTO createUsuarioService(UsuarioRequestDTO request) {
+        String cpfLimpo = tratarCpf(request.cpf());
 
-        if (repository.existsByCpf(request.cpf())) {
+        if (repository.existsByCpf(cpfLimpo)) {
             throw new ConflictException("CPF já cadastrado.");
         }
 
@@ -37,6 +38,9 @@ public class UsuarioService {
         }
 
         Usuario usuario = request.createUsuario();
+
+        usuario.setNome(tratarNome(request.nome()));
+        usuario.setCpf(cpfLimpo);
 
         usuario = repository.save(usuario);
         return new UsuarioResponseDTO(usuario);
@@ -53,15 +57,21 @@ public class UsuarioService {
         Usuario usuario = repository.findById(id)
             .orElseThrow(() -> new NotFoundException("Usuário não encontrado no sistema."));
 
-        if (repository.existsByCpfAndIdNot(request.cpf(), id)) {
+        String cpfLimpo = tratarCpf(request.cpf());
+
+        if (repository.existsByCpfAndIdNot(cpfLimpo, id)) {
             throw new ConflictException("CPF já cadastrado.");
         }
 
-        if (repository.existsByCpfAndIdNot(request.email(), id)) {
+        if (repository.existsByEmailAndIdNot(request.email(), id)) {
             throw new ConflictException("Email já cadastrado.");
         }
 
         request.updateUsuario(usuario);
+
+        usuario.setNome(tratarNome(request.nome()));
+        usuario.setCpf(cpfLimpo);
+
         usuario = repository.save(usuario);
 
         return new UsuarioResponseDTO(usuario);
@@ -73,5 +83,19 @@ public class UsuarioService {
             .orElseThrow(() -> new NotFoundException("Usuário não encontrado no sistema."));
 
         repository.delete(usuario);
+    }
+
+    private String tratarNome(String nome) {
+        if (nome == null) {
+            return null;
+        }
+        return nome.trim().toUpperCase(); 
+    }
+
+    private String tratarCpf(String cpf) {
+        if (cpf == null) {
+            return null;
+        }
+        return cpf.replaceAll("\\D", "");
     }
 }
