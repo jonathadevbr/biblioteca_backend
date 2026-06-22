@@ -31,23 +31,23 @@ public class Livro {
     private String titulo;
 
     @ManyToOne
-    @JoinColumn(name = "autor_id", nullable = false)
+    @JoinColumn(name = "id_autor", nullable = false)
     private Autor autor;
 
     @ManyToOne
-    @JoinColumn(name = "categoria_id", nullable = false)
+    @JoinColumn(name = "id_categoria", nullable = false)
     private Categoria categoria;
 
     @Column(name = "isbn", nullable = false, unique = true, length = 13)
     private String isbn;
 
-    @Column(name = "ano_publicacao", nullable = false, length = 4)
+    @Column(name = "ano_publicacao", nullable = false)
     private Integer anoPublicacao;
-
+    
     @Column(name = "editora", nullable = false, length = 100)
     private String editora;
 
-    @Column(name = "quantidade", nullable = false, length = 100)
+    @Column(name = "quantidade", nullable = false)
     private Integer quantidade;
 
 }

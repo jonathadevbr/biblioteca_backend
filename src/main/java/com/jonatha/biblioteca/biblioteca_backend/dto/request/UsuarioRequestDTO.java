@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
 public record UsuarioRequestDTO(
 
     @NotBlank(message = "O nome do usuário é obrigatório.")
-    @Size(min = 5, max = 100, message = "O nome do usuário deve ter entreo 5 e 100 caracteres.")
+    @Size(min = 5, max = 100, message = "O nome do usuário deve ter entre 5 e 100 caracteres.")
     String nome,
 
     @NotBlank(message = "O CPF do usuário é obrigatório.")
