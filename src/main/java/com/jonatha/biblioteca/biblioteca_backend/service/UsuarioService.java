@@ -6,7 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.jonatha.biblioteca.biblioteca_backend.dto.request.UsuarioRequestDTO;
+import com.jonatha.biblioteca.biblioteca_backend.dto.request.usuario.UsuarioUpdateRequestDTO;
+import com.jonatha.biblioteca.biblioteca_backend.dto.request.usuario.UsuarioCreateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.response.UsuarioResponseDTO;
 import com.jonatha.biblioteca.biblioteca_backend.exception.ConflictException;
 import com.jonatha.biblioteca.biblioteca_backend.exception.NotFoundException;
@@ -26,12 +27,8 @@ public class UsuarioService {
         return repository.findAll(pageable).map(UsuarioResponseDTO::new);
     }
 
-    public UsuarioResponseDTO createUsuarioService(UsuarioRequestDTO request) {
-        String cpfLimpo = tratarCpf(request.cpf());
-
-        if (repository.existsByCpf(cpfLimpo)) {
-            throw new ConflictException("CPF já cadastrado.");
-        }
+    public UsuarioResponseDTO createUsuarioService(UsuarioCreateRequestDTO request) {
+        String cpfLimpo = request.cpf() != null ? request.cpf().replaceAll("\\D", "") : null;
 
         if (repository.existsByEmail(request.email())) {
             throw new ConflictException("Email já cadastrado.");
@@ -53,29 +50,29 @@ public class UsuarioService {
         return new UsuarioResponseDTO(usuario);
     }
 
-    public UsuarioResponseDTO updateUsuarioService(UUID id, UsuarioRequestDTO request) {
+    public UsuarioResponseDTO updateUsuarioService(UUID id, UsuarioUpdateRequestDTO request) {
         Usuario usuario = repository.findById(id)
             .orElseThrow(() -> new NotFoundException("Usuário não encontrado no sistema."));
-
-        String cpfLimpo = tratarCpf(request.cpf());
-
-        if (repository.existsByCpfAndIdNot(cpfLimpo, id)) {
-            throw new ConflictException("CPF já cadastrado.");
-        }
 
         if (repository.existsByEmailAndIdNot(request.email(), id)) {
             throw new ConflictException("Email já cadastrado.");
         }
 
-        request.updateUsuario(usuario);
+        if (request.nome() != null) {
+            usuario.setNome(request.nome());
+        }
 
-        usuario.setNome(tratarNome(request.nome()));
-        usuario.setCpf(cpfLimpo);
+        if (request.celular() != null) {
+            usuario.setCelular(request.celular());
+        }
+
+        if (request.email() != null) {
+            usuario.setEmail(request.email());
+        }
 
         usuario = repository.save(usuario);
 
         return new UsuarioResponseDTO(usuario);
-    
     }
 
     public void deleteUsuarioService(UUID id) {
@@ -89,13 +86,6 @@ public class UsuarioService {
         if (nome == null) {
             return null;
         }
-        return nome.trim().toUpperCase(); 
-    }
-
-    private String tratarCpf(String cpf) {
-        if (cpf == null) {
-            return null;
-        }
-        return cpf.replaceAll("\\D", "");
+        return nome.trim().toUpperCase();
     }
 }

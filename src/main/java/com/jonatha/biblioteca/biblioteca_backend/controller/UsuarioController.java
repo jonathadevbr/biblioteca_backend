@@ -3,7 +3,8 @@ package com.jonatha.biblioteca.biblioteca_backend.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jonatha.biblioteca.biblioteca_backend.dto.request.UsuarioRequestDTO;
+import com.jonatha.biblioteca.biblioteca_backend.dto.request.usuario.UsuarioUpdateRequestDTO;
+import com.jonatha.biblioteca.biblioteca_backend.dto.request.usuario.UsuarioCreateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.response.UsuarioResponseDTO;
 import com.jonatha.biblioteca.biblioteca_backend.service.UsuarioService;
 
@@ -77,7 +78,7 @@ public class UsuarioController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UsuarioResponseDTO createUsuarioController(@Valid @RequestBody UsuarioRequestDTO request) {
+    public UsuarioResponseDTO createUsuarioController(@Valid @RequestBody UsuarioCreateRequestDTO request) {
         return usuarioService.createUsuarioService(request);
     }
 
@@ -125,7 +126,7 @@ public class UsuarioController {
     })
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UsuarioResponseDTO updateUsuarioController(@PathVariable UUID id, @Valid @RequestBody UsuarioRequestDTO request) {
+    public UsuarioResponseDTO updateUsuarioController(@PathVariable UUID id, @Valid @RequestBody UsuarioUpdateRequestDTO  request) {
         return usuarioService.updateUsuarioService(id, request);
     }
 
