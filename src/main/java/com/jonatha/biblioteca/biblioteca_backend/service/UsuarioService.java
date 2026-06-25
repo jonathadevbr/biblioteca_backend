@@ -30,6 +30,10 @@ public class UsuarioService {
     public UsuarioResponseDTO createUsuarioService(UsuarioCreateRequestDTO request) {
         String cpfLimpo = request.cpf() != null ? request.cpf().replaceAll("\\D", "") : null;
 
+        if (repository.existsByCpf(cpfLimpo)) {
+            throw new ConflictException("CPF já cadastrado.");
+        }
+
         if (repository.existsByEmail(request.email())) {
             throw new ConflictException("Email já cadastrado.");
         }
@@ -59,7 +63,7 @@ public class UsuarioService {
         }
 
         if (request.nome() != null) {
-            usuario.setNome(request.nome());
+            usuario.setNome(tratarNome(request.nome()));
         }
 
         if (request.celular() != null) {
