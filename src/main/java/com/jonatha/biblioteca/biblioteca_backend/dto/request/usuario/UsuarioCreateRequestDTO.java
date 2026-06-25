@@ -1,4 +1,4 @@
-package com.jonatha.biblioteca.biblioteca_backend.dto.request;
+package com.jonatha.biblioteca.biblioteca_backend.dto.request.usuario;
 
 import com.jonatha.biblioteca.biblioteca_backend.model.Usuario;
 
@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record UsuarioRequestDTO(
+public record UsuarioCreateRequestDTO(
 
     @NotBlank(message = "O nome do usuário é obrigatório.")
     @Size(min = 5, max = 100, message = "O nome do usuário deve ter entre 5 e 100 caracteres.")
@@ -35,13 +35,4 @@ public record UsuarioRequestDTO(
         
         return entity;
     }
-
-    public void updateUsuario(Usuario entity) {
-        entity.setNome(this.nome);
-        entity.setCpf(this.cpf);
-        entity.setEmail(this.email);
-        entity.setCelular(this.celular);
-    }
-
-
 }
