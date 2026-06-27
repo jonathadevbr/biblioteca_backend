@@ -25,10 +25,10 @@ public class Autor {
     @Column(name = "id_autor", nullable = false, updatable = false)
     private UUID id;
 
-    @Column(name = "nome", nullable = false)
+    @Column(name = "nome", nullable = false, length = 255)
     private String nome;
 
-    @Column(name = "nacionalidade", nullable = false)
+    @Column(name = "nacionalidade", nullable = false, length = 255)
     private String nacionalidade;
 
 }
