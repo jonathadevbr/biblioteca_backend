@@ -17,11 +17,11 @@ public record AutorCreateRequestDTO(
 
 ) {
     public Autor createAutor() {
-        Autor entity = new Autor();
+        Autor autor = new Autor();
 
-        entity.setNome(this.nome);
-        entity.setNacionalidade(this.nacionalidade);
+        autor.setNome(this.nome);
+        autor.setNacionalidade(this.nacionalidade);
 
-        return entity;
+        return autor;
     }
 }
