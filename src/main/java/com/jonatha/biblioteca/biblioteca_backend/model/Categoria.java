@@ -25,9 +25,9 @@ public class Categoria {
     @Column(name = "id_categoria", nullable = false, updatable = false)
     private UUID id;
 
-    @Column(name = "nome", nullable = false, unique = true)
+    @Column(name = "nome", nullable = false, unique = true, length = 255)
     private String nome;
 
-    @Column(name = "descricao")
+    @Column(name = "descricao", length = 255)
     private String descricao;
 }
