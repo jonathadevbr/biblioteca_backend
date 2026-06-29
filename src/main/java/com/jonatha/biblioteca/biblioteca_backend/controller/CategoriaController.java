@@ -21,6 +21,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -125,5 +126,26 @@ public class CategoriaController {
     @PutMapping("/{id}")
     public CategoriaResponseDTO updateCategoriaController(@PathVariable UUID id, @Valid @RequestBody CategoriaUpdateRequestDTO request) {        
         return categoriaService.updateCategoriaService(id, request);
+    }
+
+    // DELETE
+    @Operation(summary = "Deletar uma categoria já registrado no sistema.")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "Categoria deletado com sucesso."),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Categoria não encontrado na base de dados.",
+            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Usuário não encontrado no sistema."))),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Erro interno de servidor.",
+            content = @Content(schema = @Schema(hidden = true)))
+    })
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCategoriaController(@PathVariable UUID id) {
+        categoriaService.deleteCategoriaService(id);
     }
 }

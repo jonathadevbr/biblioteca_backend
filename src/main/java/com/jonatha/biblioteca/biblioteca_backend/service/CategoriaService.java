@@ -60,6 +60,13 @@ public class CategoriaService {
         return new CategoriaResponseDTO(categoria);
     }
 
+    public void deleteCategoriaService(UUID id) {
+        Categoria categoria = repository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Categoria não encontrada no sistema."));
+
+        repository.delete(categoria);
+    }
+
     private String tratarNome(String nome) {
         if (nome == null) return null;
         return nome.trim().toUpperCase();
