@@ -21,14 +21,8 @@ public class CategoriaService {
         this.repository = repository;
     }
 
-    public CategoriaResponseDTO createCategoriaService(CategoriaCreateRequestDTO request) {
-        Categoria categoria = request.createCategoria();
-
-        categoria.setNome(tratarNome(request.nome()));
-        categoria.setDescricao(tratarDescricao(request.descricao()));
-
-        categoria = repository.save(categoria);
-        return new CategoriaResponseDTO(categoria);
+    public Page<CategoriaResponseDTO> getAllCategoriaService(Pageable pageable) {
+        return repository.findAll(pageable).map(CategoriaResponseDTO::new);
     }
 
     public CategoriaResponseDTO getCategoriaService(UUID id) {
@@ -38,8 +32,14 @@ public class CategoriaService {
             return new CategoriaResponseDTO(categoria);
     }
 
-    public Page<CategoriaResponseDTO> getAllCategoriaService(Pageable pageable) {
-        return repository.findAll(pageable).map(CategoriaResponseDTO::new);
+    public CategoriaResponseDTO createCategoriaService(CategoriaCreateRequestDTO request) {
+        Categoria categoria = request.createCategoria();
+
+        categoria.setNome(tratarNome(request.nome()));
+        categoria.setDescricao(tratarDescricao(request.descricao()));
+
+        categoria = repository.save(categoria);
+        return new CategoriaResponseDTO(categoria);
     }
 
     private String tratarNome(String nome) {
