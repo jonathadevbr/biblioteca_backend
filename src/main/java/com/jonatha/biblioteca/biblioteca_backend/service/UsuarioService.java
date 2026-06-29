@@ -48,15 +48,13 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDTO getUsuarioService(UUID id) {
-        Usuario usuario = repository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Usuário não encontrado no sistema."));
+        Usuario usuario = buscarUsuarioPorId(id);
 
         return new UsuarioResponseDTO(usuario);
     }
 
     public UsuarioResponseDTO updateUsuarioService(UUID id, UsuarioUpdateRequestDTO request) {
-        Usuario usuario = repository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Usuário não encontrado no sistema."));
+        Usuario usuario = buscarUsuarioPorId(id);
 
         if (repository.existsByEmailAndIdNot(request.email(), id)) {
             throw new ConflictException("Email já cadastrado.");
@@ -80,10 +78,14 @@ public class UsuarioService {
     }
 
     public void deleteUsuarioService(UUID id) {
-        Usuario usuario = repository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Usuário não encontrado no sistema."));
+        Usuario usuario = buscarUsuarioPorId(id);
 
         repository.delete(usuario);
+    }
+
+    private Usuario buscarUsuarioPorId(UUID id) {
+        return repository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Usuário não encontrado no sistema."));
     }
 
     private String tratarNome(String nome) {

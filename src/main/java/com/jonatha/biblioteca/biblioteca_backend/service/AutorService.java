@@ -37,15 +37,13 @@ public class AutorService {
     }
 
     public AutorResponseDTO getAutorService(UUID id) {
-        Autor autor = repository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Autor não encontrado no sistema."));
+        Autor autor = buscarAutorPorId(id);
 
         return new AutorResponseDTO(autor);
     }
 
     public AutorResponseDTO updateAutorService(UUID id, AutorUpdateRequestDTO request) {
-        Autor autor = repository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Autor não encontrado no sistema."));
+        Autor autor = buscarAutorPorId(id);
     
         if (request.nome() != null) {
             autor.setNome(tratarNome(request.nome()));
@@ -61,10 +59,14 @@ public class AutorService {
     }
 
     public void deleteAutorService(UUID id) {
-        Autor autor = repository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Autor não encontrado no sistema."));
+        Autor autor = buscarAutorPorId(id);
         
         repository.delete(autor);
+    }
+
+    private Autor buscarAutorPorId(UUID id) {
+        return repository.findById(id) 
+            .orElseThrow(() -> new NotFoundException("Autor não encontrada no sistema."));
     }
 
     private String tratarNome(String nome) {

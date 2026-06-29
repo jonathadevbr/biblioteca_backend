@@ -1,6 +1,8 @@
 package com.jonatha.biblioteca.biblioteca_backend.service;
 
 
+import java.util.UUID;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -62,6 +64,11 @@ public class LivroService {
 
         livro = repository.save(livro);
         return new LivroResponseDTO(livro);
+    }
+
+    private Livro buscarLivroPorId(UUID id) {
+        return repository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Livro não encontrado no sistema."));
     }
 
     private String tratarTitulo(String titulo) {
