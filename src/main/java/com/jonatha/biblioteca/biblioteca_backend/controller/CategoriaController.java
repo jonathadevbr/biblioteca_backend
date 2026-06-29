@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.categoria.CategoriaCreateRequestDTO;
+import com.jonatha.biblioteca.biblioteca_backend.dto.request.categoria.CategoriaUpdateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.response.CategoriaResponseDTO;
 import com.jonatha.biblioteca.biblioteca_backend.service.CategoriaService;
 
@@ -26,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 
@@ -100,5 +103,27 @@ public class CategoriaController {
         return categoriaService.getCategoriaService(id);
     }
     
-    
+    // PUT
+    @Operation(summary = "Atualizar uma categoria já registrado no sistema.")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Categoria atualizado com sucesso."),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Dados inválidos fornecidos na requisição.",
+            content = @Content(schema = @Schema(hidden = true))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Autor não encontrado na base de dados.",
+            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Usuário não encontrado no sistema."))),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Erro interno de servidor.",
+            content = @Content(schema = @Schema(hidden = true)))
+    })
+    @PutMapping("/{id}")
+    public CategoriaResponseDTO updateCategoriaController(@PathVariable UUID id, @Valid @RequestBody CategoriaUpdateRequestDTO request) {        
+        return categoriaService.updateCategoriaService(id, request);
+    }
 }

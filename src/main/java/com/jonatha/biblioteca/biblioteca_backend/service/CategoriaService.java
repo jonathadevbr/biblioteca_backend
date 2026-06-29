@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.categoria.CategoriaCreateRequestDTO;
+import com.jonatha.biblioteca.biblioteca_backend.dto.request.categoria.CategoriaUpdateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.response.CategoriaResponseDTO;
 import com.jonatha.biblioteca.biblioteca_backend.exception.NotFoundException;
 import com.jonatha.biblioteca.biblioteca_backend.model.Categoria;
@@ -39,6 +40,23 @@ public class CategoriaService {
         categoria.setDescricao(tratarDescricao(request.descricao()));
 
         categoria = repository.save(categoria);
+        return new CategoriaResponseDTO(categoria);
+    }
+
+    public CategoriaResponseDTO updateCategoriaService(UUID id, CategoriaUpdateRequestDTO request) {
+        Categoria categoria = repository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Categoria não encontrada no sistema."));
+
+        if (request.nome() != null) {
+            categoria.setNome(tratarNome(request.nome()));
+        }
+
+        if (request.descricao() != null) {
+            categoria.setDescricao(tratarDescricao(request.descricao()));
+        }
+
+        categoria = repository.save(categoria);
+
         return new CategoriaResponseDTO(categoria);
     }
 
