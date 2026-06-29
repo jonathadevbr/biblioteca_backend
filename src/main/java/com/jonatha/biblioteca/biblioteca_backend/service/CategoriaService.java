@@ -37,15 +37,13 @@ public class CategoriaService {
     }
 
     public CategoriaResponseDTO getCategoriaService(UUID id) {
-        Categoria categoria = repository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Categoria não encontrada no sistema."));
+        Categoria categoria = buscarCategoriaPorId(id);
 
             return new CategoriaResponseDTO(categoria);
     }
 
     public CategoriaResponseDTO updateCategoriaService(UUID id, CategoriaUpdateRequestDTO request) {
-        Categoria categoria = repository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Categoria não encontrada no sistema."));
+        Categoria categoria = buscarCategoriaPorId(id);
 
         if (request.nome() != null) {
             categoria.setNome(tratarNome(request.nome()));
@@ -61,8 +59,7 @@ public class CategoriaService {
     }
 
     public void deleteCategoriaService(UUID id) {
-        Categoria categoria = repository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Categoria não encontrada no sistema."));
+        Categoria categoria = buscarCategoriaPorId(id);
 
         repository.delete(categoria);
     }
