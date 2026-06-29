@@ -15,10 +15,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+import java.util.UUID;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -74,6 +77,27 @@ public class CategoriaController {
     @ResponseStatus(HttpStatus.CREATED)
     public CategoriaResponseDTO createCategoriaController(@Valid @RequestBody CategoriaCreateRequestDTO request) {
         return categoriaService.createCategoriaService(request);
+    }
+    
+    // GET
+    @Operation(summary = "Buscar uma categoria por ID no sistema.")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Categoria encontrado com sucesso."),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Categoria não encontrado na base de dados.",
+            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Categoria não encontrado no sistema."))),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Erro interno de servidor.",
+            content = @Content(schema = @Schema(hidden = true)))
+    })
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public CategoriaResponseDTO getCategoria(@PathVariable UUID id) {
+        return categoriaService.getCategoriaService(id);
     }
     
     

@@ -1,11 +1,14 @@
 package com.jonatha.biblioteca.biblioteca_backend.service;
 
+import java.util.UUID;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.categoria.CategoriaCreateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.response.CategoriaResponseDTO;
+import com.jonatha.biblioteca.biblioteca_backend.exception.NotFoundException;
 import com.jonatha.biblioteca.biblioteca_backend.model.Categoria;
 import com.jonatha.biblioteca.biblioteca_backend.repository.CategoriaRepository;
 
@@ -26,6 +29,13 @@ public class CategoriaService {
 
         categoria = repository.save(categoria);
         return new CategoriaResponseDTO(categoria);
+    }
+
+    public CategoriaResponseDTO getCategoriaService(UUID id) {
+        Categoria categoria = repository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Categoria não encontrada no sistema."));
+
+            return new CategoriaResponseDTO(categoria);
     }
 
     public Page<CategoriaResponseDTO> getAllCategoriaService(Pageable pageable) {
