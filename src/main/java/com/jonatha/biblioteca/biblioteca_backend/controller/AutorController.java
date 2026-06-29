@@ -96,7 +96,7 @@ public class AutorController {
     })
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public AutorResponseDTO getUsuarioController(@PathVariable UUID id) {
+    public AutorResponseDTO getAutorController(@PathVariable UUID id) {
         return autorService.getAutorService(id);
     }
 
