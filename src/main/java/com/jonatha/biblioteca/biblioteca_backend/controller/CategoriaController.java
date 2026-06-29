@@ -3,6 +3,7 @@ package com.jonatha.biblioteca.biblioteca_backend.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jonatha.biblioteca.biblioteca_backend.dto.request.categoria.CategoriaCreateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.response.CategoriaResponseDTO;
 import com.jonatha.biblioteca.biblioteca_backend.service.CategoriaService;
 
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +21,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @RestController
@@ -49,5 +54,27 @@ public class CategoriaController {
         @RequestParam(defaultValue = "10") int size) {
         return categoriaService.getAllCategoriaService(PageRequest.of(page, size));
     }
+
+    // POST
+    @Operation(summary = "Cria uma categoria novo no sistema.")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "201",
+            description = "Categoria criado com sucesso."),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Dados inválidos fornecidos na requisição.",
+            content = @Content(schema = @Schema(hidden = true))),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Erro interno de servidor.",
+            content = @Content(schema = @Schema(hidden = true)))
+    })
+    @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
+    public CategoriaResponseDTO createCategoriaController(@Valid @RequestBody CategoriaCreateRequestDTO request) {
+        return categoriaService.createCategoriaService(request);
+    }
+    
     
 }
