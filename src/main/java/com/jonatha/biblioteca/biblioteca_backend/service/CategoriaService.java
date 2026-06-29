@@ -26,13 +26,6 @@ public class CategoriaService {
         return repository.findAll(pageable).map(CategoriaResponseDTO::new);
     }
 
-    public CategoriaResponseDTO getCategoriaService(UUID id) {
-        Categoria categoria = repository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Categoria não encontrada no sistema."));
-
-            return new CategoriaResponseDTO(categoria);
-    }
-
     public CategoriaResponseDTO createCategoriaService(CategoriaCreateRequestDTO request) {
         Categoria categoria = request.createCategoria();
 
@@ -41,6 +34,13 @@ public class CategoriaService {
 
         categoria = repository.save(categoria);
         return new CategoriaResponseDTO(categoria);
+    }
+
+    public CategoriaResponseDTO getCategoriaService(UUID id) {
+        Categoria categoria = repository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Categoria não encontrada no sistema."));
+
+            return new CategoriaResponseDTO(categoria);
     }
 
     public CategoriaResponseDTO updateCategoriaService(UUID id, CategoriaUpdateRequestDTO request) {
@@ -65,6 +65,11 @@ public class CategoriaService {
             .orElseThrow(() -> new NotFoundException("Categoria não encontrada no sistema."));
 
         repository.delete(categoria);
+    }
+
+    private Categoria buscarCategoriaPorId(UUID id) {
+        return repository.findById(id) 
+            .orElseThrow(() -> new NotFoundException("Categoria não encontrada no sistema."));
     }
 
     private String tratarNome(String nome) {
