@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 @RestController
-@RequestMapping("/v2/api/livro")
+@RequestMapping("/v2/blblioteca/livro")
 @Tag(name = "Livro", description = "Endpoints para gerenciamento de livros no sistema.")
 public class LivroController {
     private final LivroService livroService;

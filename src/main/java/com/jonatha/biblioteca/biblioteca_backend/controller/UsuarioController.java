@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
-@RequestMapping("/v2/api/usuario")
+@RequestMapping("/v2/biblioteca/usuario")
 @Tag(name = "Usuário", description = "Endpoints para gerenciamento de usuários no sistema")
 public class UsuarioController {
     private final UsuarioService usuarioService;
