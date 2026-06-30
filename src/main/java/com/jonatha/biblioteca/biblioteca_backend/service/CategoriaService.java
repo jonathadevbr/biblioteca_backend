@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.categoria.CategoriaCreateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.categoria.CategoriaUpdateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.response.CategoriaResponseDTO;
+import com.jonatha.biblioteca.biblioteca_backend.exception.ConflictException;
 import com.jonatha.biblioteca.biblioteca_backend.exception.NotFoundException;
 import com.jonatha.biblioteca.biblioteca_backend.model.Categoria;
 import com.jonatha.biblioteca.biblioteca_backend.repository.CategoriaRepository;
@@ -27,10 +28,20 @@ public class CategoriaService {
     }
 
     public CategoriaResponseDTO createCategoriaService(CategoriaCreateRequestDTO request) {
-        Categoria categoria = request.createCategoria();
+        String nomeTratado = tratarNome(request.nome());
+        String descricaoTratada = tratarDescricao(request.descricao());
 
-        categoria.setNome(tratarNome(request.nome()));
-        categoria.setDescricao(tratarDescricao(request.descricao()));
+        if (repository.existsByNome(nomeTratado)) {
+            throw new ConflictException("Nome de categoria já cadastrado.");
+        }
+
+        if (repository.existsByDescricao(descricaoTratada)) {
+            throw new ConflictException("Descrição da categoria já cadastrado.");
+        }
+
+        Categoria categoria = request.createCategoria();
+        categoria.setNome(nomeTratado);
+        categoria.setDescricao(descricaoTratada);
 
         categoria = repository.save(categoria);
         return new CategoriaResponseDTO(categoria);
@@ -45,16 +56,26 @@ public class CategoriaService {
     public CategoriaResponseDTO updateCategoriaService(UUID id, CategoriaUpdateRequestDTO request) {
         Categoria categoria = buscarCategoriaPorId(id);
 
-        if (request.nome() != null) {
-            categoria.setNome(tratarNome(request.nome()));
+        String nomeTratado = tratarNome(request.nome());
+        String descricaoTratada = tratarDescricao(request.descricao());
+
+        if (nomeTratado != null && repository.existsByNomeAndIdNot(nomeTratado, id)) {
+            throw new ConflictException("Nome de categoria já cadastrado.");
         }
 
-        if (request.descricao() != null) {
-            categoria.setDescricao(tratarDescricao(request.descricao()));
+        if (descricaoTratada != null && repository.existsByDescricaoAndIdNot(descricaoTratada, id)) {
+            throw new ConflictException("Descrição da categoria já cadastrado.");
+        }
+
+        if (nomeTratado != null) {
+            categoria.setNome(nomeTratado);
+        }
+
+        if (descricaoTratada != null) {
+            categoria.setDescricao(descricaoTratada);
         }
 
         categoria = repository.save(categoria);
-
         return new CategoriaResponseDTO(categoria);
     }
 

@@ -94,13 +94,17 @@ public class CategoriaController {
             description = "Categoria não encontrado na base de dados.",
             content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Categoria não encontrado no sistema."))),
         @ApiResponse(
+            responseCode = "409",
+            description = "Nome ou descrição já cadastrado.",
+            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Nome já cadastrado."))),
+        @ApiResponse(
             responseCode = "500",
             description = "Erro interno de servidor.",
             content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CategoriaResponseDTO getCategoria(@PathVariable UUID id) {
+    public CategoriaResponseDTO getCategoria(@Valid @PathVariable UUID id) {
         return categoriaService.getCategoriaService(id);
     }
     
@@ -119,12 +123,16 @@ public class CategoriaController {
             description = "Autor não encontrado na base de dados.",
             content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Usuário não encontrado no sistema."))),
         @ApiResponse(
+            responseCode = "409",
+            description = "Nome ou descrição já cadastrado.",
+            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Nome já cadastrado."))),    
+        @ApiResponse(
             responseCode = "500",
             description = "Erro interno de servidor.",
             content = @Content(schema = @Schema(hidden = true)))
     })
     @PutMapping("/{id}")
-    public CategoriaResponseDTO updateCategoriaController(@PathVariable UUID id, @Valid @RequestBody CategoriaUpdateRequestDTO request) {        
+    public CategoriaResponseDTO updateCategoriaController(@Valid @PathVariable UUID id, @Valid @RequestBody CategoriaUpdateRequestDTO request) {        
         return categoriaService.updateCategoriaService(id, request);
     }
 

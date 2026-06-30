@@ -9,4 +9,8 @@ import com.jonatha.biblioteca.biblioteca_backend.model.Categoria;
 public interface CategoriaRepository extends JpaRepository<Categoria, UUID> {
     boolean existsByNome(String nome);
     boolean existsByNomeAndIdNot(String nome, UUID id);
+
+    boolean existsByDescricao(String descricao);
+
+    boolean existsByDescricaoAndIdNot(String descricao, UUID id);
 }
