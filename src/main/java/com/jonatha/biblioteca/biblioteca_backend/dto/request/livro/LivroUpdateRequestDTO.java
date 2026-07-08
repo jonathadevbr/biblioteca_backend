@@ -1,5 +1,6 @@
 package com.jonatha.biblioteca.biblioteca_backend.dto.request.livro;
 
+import java.util.List;
 import java.util.UUID;
 
 import jakarta.validation.constraints.Pattern;
@@ -11,7 +12,7 @@ public record LivroUpdateRequestDTO(
     @Size(min = 5, max = 100, message = "O título do livro deve ter entre 5 e 100 caracteres.")
     String titulo,
 
-    UUID idAutor,
+    List<UUID> idsAutores,
 
     UUID idCategoria,
 

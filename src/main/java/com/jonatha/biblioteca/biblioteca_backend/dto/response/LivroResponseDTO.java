@@ -1,13 +1,15 @@
 package com.jonatha.biblioteca.biblioteca_backend.dto.response;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.jonatha.biblioteca.biblioteca_backend.model.Livro;
 
 public record LivroResponseDTO(
     UUID id,
     String titulo,
-    String nomeAutor,
+    List<UUID> idsAutores,
     String descricaoCategoria,
     String isbn,
     Integer anoPublicacao,
@@ -18,7 +20,9 @@ public record LivroResponseDTO(
         this(
             entity.getId(),
             entity.getTitulo(),
-            entity.getAutor().getNome(),
+                entity.getAutores().stream()
+                        .map(autor -> autor.getId())
+                        .collect(Collectors.toList()),
             entity.getCategoria().getDescricao(),
             entity.getIsbn(),
             entity.getAnoPublicacao(),

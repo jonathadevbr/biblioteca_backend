@@ -1,5 +1,7 @@
 package com.jonatha.biblioteca.biblioteca_backend.dto.request.livro;
 
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import com.jonatha.biblioteca.biblioteca_backend.model.Autor;
@@ -19,7 +21,7 @@ public record LivroCreateRequestDTO(
     String titulo,
 
     @NotNull(message = "O autor do livro é obrigatório.")
-    UUID idAutor,
+    List<UUID> idsAutores,
 
     @NotNull(message = "A categoria do livro é obrigatória.")
     UUID idCategoria,
@@ -39,11 +41,11 @@ public record LivroCreateRequestDTO(
     @Positive(message = "A quantidade deve ser maior que zero.")
     Integer quantidade
 ) {
-    public Livro createLivro(Autor autor, Categoria categoria) {
+    public Livro createLivro(Set<Autor> autores, Categoria categoria) {
         Livro entity = new Livro();
 
         entity.setTitulo(this.titulo);
-        entity.setAutor(autor);
+        entity.setAutores(autores);
         entity.setCategoria(categoria);
         entity.setIsbn(this.isbn);
         entity.setAnoPublicacao(this.anoPublicacao);
