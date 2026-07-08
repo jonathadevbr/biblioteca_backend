@@ -42,16 +42,16 @@ public record LivroCreateRequestDTO(
     Integer quantidade
 ) {
     public Livro createLivro(Set<Autor> autores, Categoria categoria) {
-        Livro entity = new Livro();
+        Livro livro = new Livro();
 
-        entity.setTitulo(this.titulo);
-        entity.setAutores(autores);
-        entity.setCategoria(categoria);
-        entity.setIsbn(this.isbn);
-        entity.setAnoPublicacao(this.anoPublicacao);
-        entity.setEditora(this.editora);
-        entity.setQuantidade(this.quantidade);
+        livro.setTitulo(this.titulo);
+        livro.setAutores(autores);
+        livro.setCategoria(categoria);
+        livro.setIsbn(this.isbn);
+        livro.setAnoPublicacao(this.anoPublicacao);
+        livro.setEditora(this.editora);
+        livro.setQuantidade(this.quantidade);
 
-        return entity;
+        return livro;
     }
 }

@@ -11,13 +11,13 @@ public record UsuarioResponseDTO(
     String email,
     String celular
 ) {
-    public UsuarioResponseDTO(Usuario entity) {
+    public UsuarioResponseDTO(Usuario usuario) {
         this(
-            entity.getId(),
-            entity.getNome(),
-            entity.getCpf(),
-            entity.getEmail(),
-            entity.getCelular()
+            usuario.getId(),
+            usuario.getNome(),
+            usuario.getCpf(),
+            usuario.getEmail(),
+            usuario.getCelular()
         );
     }
 }

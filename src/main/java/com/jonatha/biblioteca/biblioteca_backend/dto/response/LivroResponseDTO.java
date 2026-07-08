@@ -16,18 +16,18 @@ public record LivroResponseDTO(
     String editora,
     Integer quantidade
 ) {
-    public LivroResponseDTO(Livro entity) {
+    public LivroResponseDTO(Livro livro) {
         this(
-            entity.getId(),
-            entity.getTitulo(),
-                entity.getAutores().stream()
+            livro.getId(),
+            livro.getTitulo(),
+                livro.getAutores().stream()
                         .map(autor -> autor.getId())
                         .collect(Collectors.toList()),
-            entity.getCategoria().getDescricao(),
-            entity.getIsbn(),
-            entity.getAnoPublicacao(),
-            entity.getEditora(),
-            entity.getQuantidade()
+            livro.getCategoria().getDescricao(),
+            livro.getIsbn(),
+            livro.getAnoPublicacao(),
+            livro.getEditora(),
+            livro.getQuantidade()
         );
     }
 }

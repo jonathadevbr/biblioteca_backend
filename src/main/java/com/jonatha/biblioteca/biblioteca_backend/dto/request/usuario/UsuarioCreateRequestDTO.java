@@ -26,13 +26,13 @@ public record UsuarioCreateRequestDTO(
     String celular
 ) {
     public Usuario createUsuario() {
-        Usuario entity = new Usuario();
+        Usuario usuario = new Usuario();
         
-        entity.setNome(this.nome);
-        entity.setCpf(this.cpf);
-        entity.setEmail(this.email);
-        entity.setCelular(this.celular);
+        usuario.setNome(this.nome);
+        usuario.setCpf(this.cpf);
+        usuario.setEmail(this.email);
+        usuario.setCelular(this.celular);
         
-        return entity;
+        return usuario;
     }
 }
