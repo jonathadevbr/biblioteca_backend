@@ -1,13 +1,10 @@
 package com.jonatha.biblioteca.biblioteca_backend.model;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,5 +27,8 @@ public class Autor {
 
     @Column(name = "nacionalidade", nullable = false, length = 255)
     private String nacionalidade;
+
+    @ManyToMany(mappedBy = "autores")
+    private Set<Livro> livros = new HashSet<>();
 
 }

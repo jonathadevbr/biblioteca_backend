@@ -1,15 +1,10 @@
 package com.jonatha.biblioteca.biblioteca_backend.model;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,9 +25,14 @@ public class Livro {
     @Column(name = "titulo", nullable = false, length = 100)
     private String titulo;
 
-    @ManyToOne
-    @JoinColumn(name = "id_autor", nullable = false)
-    private Autor autor;
+    @ManyToMany
+    @JoinTable(
+            name = "livro_autor",
+            schema = "biblioteca",
+            joinColumns = @JoinColumn(name = "id_livro"),
+            inverseJoinColumns = @JoinColumn(name = "id_autor")
+    )
+    private Set<Autor> autores = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "id_categoria", nullable = false)
