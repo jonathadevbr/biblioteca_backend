@@ -1,6 +1,8 @@
 package com.jonatha.biblioteca.biblioteca_backend.service;
 
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -51,13 +53,16 @@ public class LivroService {
             throw new ConflictException("ISBN já cadastrado.");
         }
 
-        Autor autor = autorRepository.findById(request.idAutor()) 
-            .orElseThrow(() -> new NotFoundException("Autor não encontrado."));
+        Set<Autor> autores = new HashSet<>(autorRepository.findAllById(request.idsAutores()));
+
+        if (autores.size() != new HashSet<>(request.idsAutores()).size()) {
+            throw new NotFoundException("Um ou mais autores não foram encontrados.");
+        }
 
         Categoria categoria = categoriaRepository.findById(request.idCategoria())
             .orElseThrow(() -> new NotFoundException("Categoria não encontrada."));
 
-        Livro livro = request.createLivro(autor, categoria);
+        Livro livro = request.createLivro(autores, categoria);
 
         livro.setTitulo(tratarTitulo(request.titulo()));
         livro.setIsbn(isbnLimpo);

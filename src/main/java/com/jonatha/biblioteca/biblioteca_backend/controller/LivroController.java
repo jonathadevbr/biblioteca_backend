@@ -1,7 +1,8 @@
 package com.jonatha.biblioteca.biblioteca_backend.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.jonatha.biblioteca.biblioteca_backend.dto.request.livro.LivroCreateRequestDTO;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 
 import com.jonatha.biblioteca.biblioteca_backend.dto.response.LivroResponseDTO;
 import com.jonatha.biblioteca.biblioteca_backend.service.LivroService;
@@ -16,13 +17,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 @RestController
-@RequestMapping("/v2/blblioteca/livro")
+@RequestMapping("/v2/biblioteca/livro")
 @Tag(name = "Livro", description = "Endpoints para gerenciamento de livros no sistema.")
 public class LivroController {
     private final LivroService livroService;
@@ -31,6 +29,7 @@ public class LivroController {
         this.livroService = livroService;
     }
 
+    // GET ALL
     @Operation(summary = "Buscar todos os livros do sistema.")
     @ApiResponses(value = {
         @ApiResponse(
@@ -48,5 +47,13 @@ public class LivroController {
         @RequestParam(defaultValue = "10") int size) {
         return livroService.getAllLivroService(PageRequest.of(page, size));
     }
+
+    // POST
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public LivroResponseDTO createLivroController(@Valid @RequestBody LivroCreateRequestDTO request) {
+        return livroService.createLivroService(request);
+    }
+
     
 }
