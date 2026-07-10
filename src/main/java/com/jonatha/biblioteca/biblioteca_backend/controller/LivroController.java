@@ -1,13 +1,11 @@
 package com.jonatha.biblioteca.biblioteca_backend.controller;
 
-import com.jonatha.biblioteca.biblioteca_backend.dto.request.categoria.CategoriaUpdateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.livro.LivroCreateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.livro.LivroUpdateRequestDTO;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
-import com.jonatha.biblioteca.biblioteca_backend.dto.response.CategoriaResponseDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.response.LivroResponseDTO;
 import com.jonatha.biblioteca.biblioteca_backend.service.LivroService;
 

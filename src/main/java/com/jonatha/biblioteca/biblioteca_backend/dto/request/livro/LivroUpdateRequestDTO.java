@@ -3,7 +3,6 @@ package com.jonatha.biblioteca.biblioteca_backend.dto.request.livro;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
