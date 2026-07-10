@@ -9,8 +9,8 @@ import com.jonatha.biblioteca.biblioteca_backend.model.Livro;
 public record LivroResponseDTO(
     UUID id,
     String titulo,
-    List<UUID> idsAutores,
-    String descricaoCategoria,
+    List<AutorResponseDTO> autores,
+    CategoriaResponseDTO categoria,
     String isbn,
     Integer anoPublicacao,
     String editora,
@@ -20,10 +20,10 @@ public record LivroResponseDTO(
         this(
             livro.getId(),
             livro.getTitulo(),
-                livro.getAutores().stream()
-                        .map(autor -> autor.getId())
-                        .collect(Collectors.toList()),
-            livro.getCategoria().getDescricao(),
+            livro.getAutores().stream()
+                .map(AutorResponseDTO::new)
+                .collect(Collectors.toList()),
+            new CategoriaResponseDTO(livro.getCategoria()),
             livro.getIsbn(),
             livro.getAnoPublicacao(),
             livro.getEditora(),

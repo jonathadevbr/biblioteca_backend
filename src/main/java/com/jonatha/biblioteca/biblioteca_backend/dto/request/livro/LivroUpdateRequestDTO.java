@@ -16,9 +16,6 @@ public record LivroUpdateRequestDTO(
 
     UUID idCategoria,
 
-    @Pattern(regexp = "\\d{13}", message = "ISBN deve conter 13 dígitos números.")
-    String isbn,
-
     @Positive(message = "O ano de publicação do livro deve ser maior que zero.")
     Integer anoPublicacao,
 
