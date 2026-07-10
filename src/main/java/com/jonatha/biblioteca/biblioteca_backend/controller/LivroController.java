@@ -14,9 +14,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import java.util.UUID;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -54,6 +59,28 @@ public class LivroController {
     public LivroResponseDTO createLivroController(@Valid @RequestBody LivroCreateRequestDTO request) {
         return livroService.createLivroService(request);
     }
+
+    // GET
+    @Operation(summary = "Buscar um livro por ID no sistema.")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Livro encontrado com sucesso."),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Livro não encontrado na base de dados.",
+            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Livro não encontrado no sistema."))),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Erro interno de servidor.",
+            content = @Content(schema = @Schema(hidden = true)))
+    })
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public LivroResponseDTO getLivroController(@Valid @PathVariable UUID id) {
+        return livroService.getLivroService(id);
+    }
+    
 
     
 }

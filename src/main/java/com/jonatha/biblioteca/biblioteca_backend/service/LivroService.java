@@ -71,6 +71,12 @@ public class LivroService {
         return new LivroResponseDTO(livro);
     }
 
+    public LivroResponseDTO getLivroService(UUID id) {
+        Livro livro = buscarLivroPorId(id);
+
+        return new LivroResponseDTO(livro);
+    }
+
     private Livro buscarLivroPorId(UUID id) {
         return repository.findById(id)
             .orElseThrow(() -> new NotFoundException("Livro não encontrado no sistema."));
