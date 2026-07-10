@@ -116,8 +116,8 @@ public class CategoriaController {
             content = @Content(schema = @Schema(hidden = true))),
         @ApiResponse(
             responseCode = "404",
-            description = "Autor não encontrado na base de dados.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Usuário não encontrado no sistema."))),
+            description = "Categoria não encontrado na base de dados.",
+            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Categoria não encontrado no sistema."))),
         @ApiResponse(
             responseCode = "409",
             description = "Nome ou descrição já cadastrado.",
@@ -141,7 +141,7 @@ public class CategoriaController {
         @ApiResponse(
             responseCode = "404",
             description = "Categoria não encontrado na base de dados.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Usuário não encontrado no sistema."))),
+            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Categoria não encontrado no sistema."))),
         @ApiResponse(
             responseCode = "500",
             description = "Erro interno de servidor.",

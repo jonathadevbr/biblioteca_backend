@@ -113,7 +113,7 @@ public class AutorController {
         @ApiResponse(
             responseCode = "404",
             description = "Autor não encontrado na base de dados.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Usuário não encontrado no sistema."))),
+            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Autor não encontrado no sistema."))),
         @ApiResponse(
             responseCode = "500",
             description = "Erro interno de servidor.",
@@ -134,7 +134,7 @@ public class AutorController {
         @ApiResponse(
             responseCode = "404",
             description = "Autor não encontrado na base de dados.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Usuário não encontrado no sistema."))),
+            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Autor não encontrado no sistema."))),
         @ApiResponse(
             responseCode = "500",
             description = "Erro interno de servidor.",
