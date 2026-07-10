@@ -117,6 +117,12 @@ public class LivroService {
         return new LivroResponseDTO(livro);
     }
 
+    public void deleteLivroService(UUID id) {
+        Livro livro = buscarLivroPorId(id);
+
+        repository.delete(livro);
+    }
+
     private Livro buscarLivroPorId(UUID id) {
         return repository.findById(id)
             .orElseThrow(() -> new NotFoundException("Livro não encontrado no sistema."));

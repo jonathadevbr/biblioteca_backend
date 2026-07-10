@@ -82,19 +82,19 @@ public class LivroController {
     }
     
     // PUT
-    @Operation(summary = "Atualizar uma categoria já registrado no sistema.")
+    @Operation(summary = "Atualizar um livro já registrado no sistema.")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200",
-            description = "Categoria atualizado com sucesso."),
+            description = "Livro atualizado com sucesso."),
         @ApiResponse(
             responseCode = "400",
             description = "Dados inválidos fornecidos na requisição.",
             content = @Content(schema = @Schema(hidden = true))),
         @ApiResponse(
             responseCode = "404",
-            description = "Autor ou Categoria não encontrado na base de dados.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Usuário não encontrado no sistema."))),
+            description = "Livro não encontrado na base de dados.",
+            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Livro não encontrado no sistema."))),
         @ApiResponse(
             responseCode = "500",
             description = "Erro interno de servidor.",
@@ -103,6 +103,27 @@ public class LivroController {
     @PutMapping("/{id}")
     public LivroResponseDTO updateLivroController(@Valid @PathVariable UUID id, @Valid @RequestBody LivroUpdateRequestDTO request) {        
         return livroService.updateLivroService(id, request);
+    }
+
+    // DELETE
+    @Operation(summary = "Deletar um livro já registrado no sistema.")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "Livro deletado com sucesso."),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Livro não encontrado na base de dados.",
+            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Livro não encontrado no sistema."))),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Erro interno de servidor.",
+            content = @Content(schema = @Schema(hidden = true)))
+    })
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteLivroController(@PathVariable UUID id) {
+        livroService.deleteLivroService(id);
     }
     
 }
