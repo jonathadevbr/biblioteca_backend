@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.livro.LivroCreateRequestDTO;
+import com.jonatha.biblioteca.biblioteca_backend.dto.request.livro.LivroUpdateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.response.LivroResponseDTO;
 import com.jonatha.biblioteca.biblioteca_backend.exception.ConflictException;
 import com.jonatha.biblioteca.biblioteca_backend.exception.NotFoundException;
@@ -77,6 +78,45 @@ public class LivroService {
         return new LivroResponseDTO(livro);
     }
 
+    public LivroResponseDTO updateLivroService(UUID id, LivroUpdateRequestDTO request) {
+        Livro livro = buscarLivroPorId(id);
+
+        if (request.titulo() != null) {
+            livro.setTitulo(tratarTitulo(request.titulo()));
+        }
+
+        if (request.idsAutores() != null) {
+            Set<Autor> autores = new HashSet<>(autorRepository.findAllById(request.idsAutores()));
+
+            if (autores.size() != new HashSet<>(request.idsAutores()).size()) {
+                throw new NotFoundException("Um ou mais autores não foram encontrados.");
+            }
+
+            livro.setAutores(autores);
+        }
+
+        if (request.idCategoria() != null) {
+            Categoria categoria = categoriaRepository.findById(request.idCategoria())
+                .orElseThrow(() -> new NotFoundException("Categoria não encontrada."));
+            livro.setCategoria(categoria);
+        }
+
+        if (request.anoPublicacao() != null) {
+            livro.setAnoPublicacao(request.anoPublicacao());
+        }
+
+        if (request.editora() != null) {
+            livro.setEditora(tratarEditora(request.editora()));
+        }
+
+        if (request.quantidade() != null) {
+            livro.setQuantidade(request.quantidade());
+        }
+
+        livro = repository.save(livro);
+        return new LivroResponseDTO(livro);
+    }
+
     private Livro buscarLivroPorId(UUID id) {
         return repository.findById(id)
             .orElseThrow(() -> new NotFoundException("Livro não encontrado no sistema."));
@@ -85,5 +125,10 @@ public class LivroService {
     private String tratarTitulo(String titulo) {
         if (titulo == null) return null;
         return titulo.trim().toUpperCase();
+    }
+
+    private String tratarEditora(String editora) {
+        if (editora == null) return null;
+        return editora.trim().toUpperCase();
     }
 }

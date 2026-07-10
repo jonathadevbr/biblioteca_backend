@@ -1,9 +1,13 @@
 package com.jonatha.biblioteca.biblioteca_backend.controller;
 
+import com.jonatha.biblioteca.biblioteca_backend.dto.request.categoria.CategoriaUpdateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.livro.LivroCreateRequestDTO;
+import com.jonatha.biblioteca.biblioteca_backend.dto.request.livro.LivroUpdateRequestDTO;
+
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import com.jonatha.biblioteca.biblioteca_backend.dto.response.CategoriaResponseDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.response.LivroResponseDTO;
 import com.jonatha.biblioteca.biblioteca_backend.service.LivroService;
 
@@ -19,8 +23,6 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -81,6 +83,28 @@ public class LivroController {
         return livroService.getLivroService(id);
     }
     
-
+    // PUT
+    @Operation(summary = "Atualizar uma categoria já registrado no sistema.")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Categoria atualizado com sucesso."),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Dados inválidos fornecidos na requisição.",
+            content = @Content(schema = @Schema(hidden = true))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Autor ou Categoria não encontrado na base de dados.",
+            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Usuário não encontrado no sistema."))),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Erro interno de servidor.",
+            content = @Content(schema = @Schema(hidden = true)))
+    })
+    @PutMapping("/{id}")
+    public LivroResponseDTO updateLivroController(@Valid @PathVariable UUID id, @Valid @RequestBody LivroUpdateRequestDTO request) {        
+        return livroService.updateLivroService(id, request);
+    }
     
 }
