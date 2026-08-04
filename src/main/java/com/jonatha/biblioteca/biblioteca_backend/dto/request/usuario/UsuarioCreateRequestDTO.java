@@ -1,5 +1,7 @@
 package com.jonatha.biblioteca.biblioteca_backend.dto.request.usuario;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 import com.jonatha.biblioteca.biblioteca_backend.model.Usuario;
 
 import jakarta.validation.constraints.Email;
@@ -14,7 +16,7 @@ public record UsuarioCreateRequestDTO(
     String nome,
 
     @NotBlank(message = "O CPF do usuário é obrigatório.")
-    @Pattern(regexp = "\\d{11}", message = "CPF deve conter 11 digitos númericos.")
+    @CPF
     String cpf,
 
     @NotBlank(message = "O E-mail do usuário é obrigatório.")
