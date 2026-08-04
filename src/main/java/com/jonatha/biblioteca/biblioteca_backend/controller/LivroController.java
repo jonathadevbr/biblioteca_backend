@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 
@@ -46,11 +46,8 @@ public class LivroController {
             content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public Page<LivroResponseDTO> getAllLivroController(
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size) {
-        return livroService.getAllLivroService(PageRequest.of(page, size));
+    public Page<LivroResponseDTO> getAllLivroController(Pageable pageable) {
+        return livroService.getAllLivroService(pageable);
     }
 
     // POST
@@ -76,7 +73,6 @@ public class LivroController {
             content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public LivroResponseDTO getLivroController(@Valid @PathVariable UUID id) {
         return livroService.getLivroService(id);
     }
@@ -101,7 +97,7 @@ public class LivroController {
             content = @Content(schema = @Schema(hidden = true)))
     })
     @PutMapping("/{id}")
-    public LivroResponseDTO updateLivroController(@Valid @PathVariable UUID id, @Valid @RequestBody LivroUpdateRequestDTO request) {        
+    public LivroResponseDTO updateLivroController(@PathVariable UUID id, @RequestBody LivroUpdateRequestDTO request) {        
         return livroService.updateLivroService(id, request);
     }
 

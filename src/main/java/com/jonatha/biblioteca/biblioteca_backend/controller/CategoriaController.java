@@ -19,12 +19,11 @@ import jakarta.validation.Valid;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,11 +54,8 @@ public class CategoriaController {
             content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public Page<CategoriaResponseDTO> getAllCategoriaController(
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size) {
-        return categoriaService.getAllCategoriaService(PageRequest.of(page, size));
+    public Page<CategoriaResponseDTO> getAllCategoriaController(Pageable pageable) {
+        return categoriaService.getAllCategoriaService(pageable);
     }
 
     // POST
@@ -99,8 +95,7 @@ public class CategoriaController {
             content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public CategoriaResponseDTO getCategoriaController(@Valid @PathVariable UUID id) {
+    public CategoriaResponseDTO getCategoriaController(@PathVariable UUID id) {
         return categoriaService.getCategoriaService(id);
     }
     
@@ -128,7 +123,7 @@ public class CategoriaController {
             content = @Content(schema = @Schema(hidden = true)))
     })
     @PutMapping("/{id}")
-    public CategoriaResponseDTO updateCategoriaController(@Valid @PathVariable UUID id, @Valid @RequestBody CategoriaUpdateRequestDTO request) {        
+    public CategoriaResponseDTO updateCategoriaController(@PathVariable UUID id, @Valid @RequestBody CategoriaUpdateRequestDTO request) {        
         return categoriaService.updateCategoriaService(id, request);
     }
 

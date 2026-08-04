@@ -20,6 +20,7 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,11 +52,8 @@ public class UsuarioController {
             content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public Page<UsuarioResponseDTO> getAllUsuarioController(
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size) {
-        return usuarioService.getAllUsuarioService(PageRequest.of(page, size));
+    public Page<UsuarioResponseDTO> getAllUsuarioController(Pageable pageable) {
+        return usuarioService.getAllUsuarioService(pageable);
     }
 
     @Operation(summary = "Cria um usuário novo no sistema.")
@@ -97,7 +95,6 @@ public class UsuarioController {
             content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public UsuarioResponseDTO getUsuarioController(@PathVariable UUID id) {
         return usuarioService.getUsuarioService(id);
     }
@@ -125,7 +122,6 @@ public class UsuarioController {
             content = @Content(schema = @Schema(hidden = true)))
     })
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public UsuarioResponseDTO updateUsuarioController(@PathVariable UUID id, @Valid @RequestBody UsuarioUpdateRequestDTO  request) {
         return usuarioService.updateUsuarioService(id, request);
     }
