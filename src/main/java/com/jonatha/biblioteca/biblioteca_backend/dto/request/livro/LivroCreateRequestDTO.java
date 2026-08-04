@@ -17,7 +17,7 @@ import jakarta.validation.constraints.Size;
 public record LivroCreateRequestDTO(
 
     @NotBlank(message = "O Título do livro é obrigatório.")
-    @Size(min = 5, max = 100, message = "O título do livro deve ter entre 5 e 100 caracteres.")
+    @Size(min = 1, max = 100, message = "O título do livro deve ter entre 5 e 100 caracteres.")
     String titulo,
 
     @NotNull(message = "O autor do livro é obrigatório.")
