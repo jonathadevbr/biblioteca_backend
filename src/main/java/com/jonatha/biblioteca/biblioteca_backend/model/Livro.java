@@ -50,4 +50,18 @@ public class Livro {
     @Column(name = "quantidade", nullable = false)
     private Integer quantidade;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        
+        Livro livro = (Livro) o;
+        
+        return isbn != null && isbn.equals(livro.isbn);
+    }
+
+    @Override
+    public int hashCode() {
+        return isbn != null ? isbn.hashCode() : getClass().hashCode();
+    }
 }
