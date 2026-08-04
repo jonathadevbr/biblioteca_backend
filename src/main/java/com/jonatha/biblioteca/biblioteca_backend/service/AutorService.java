@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.autor.AutorCreateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.autor.AutorUpdateRequestDTO;
@@ -15,20 +16,22 @@ import com.jonatha.biblioteca.biblioteca_backend.repository.AutorRepository;
 
 @Service
 public class AutorService {
-    
+
     private final AutorRepository repository;
 
     public AutorService(AutorRepository repository) {
         this.repository = repository;
     }
 
+    @Transactional(readOnly = true)
     public Page<AutorResponseDTO> getAllAutorService(Pageable pageable) {
         return repository.findAll(pageable).map(AutorResponseDTO::new);
     }
 
+    @Transactional
     public AutorResponseDTO createAutorService(AutorCreateRequestDTO request) {
         Autor autor = request.createAutor();
-        
+
         autor.setNome(tratarNome(request.nome()));
         autor.setNacionalidade(tratarNacionalidade(request.nacionalidade()));
 
@@ -36,15 +39,17 @@ public class AutorService {
         return new AutorResponseDTO(autor);
     }
 
+    @Transactional(readOnly = true)
     public AutorResponseDTO getAutorService(UUID id) {
         Autor autor = buscarAutorPorId(id);
 
         return new AutorResponseDTO(autor);
     }
 
+    @Transactional
     public AutorResponseDTO updateAutorService(UUID id, AutorUpdateRequestDTO request) {
         Autor autor = buscarAutorPorId(id);
-    
+
         if (request.nome() != null) {
             autor.setNome(tratarNome(request.nome()));
         }
@@ -54,28 +59,31 @@ public class AutorService {
         }
 
         autor = repository.save(autor);
-        
+
         return new AutorResponseDTO(autor);
     }
 
+    @Transactional
     public void deleteAutorService(UUID id) {
         Autor autor = buscarAutorPorId(id);
-        
+
         repository.delete(autor);
     }
 
     private Autor buscarAutorPorId(UUID id) {
-        return repository.findById(id) 
-            .orElseThrow(() -> new NotFoundException("Autor não encontrada no sistema."));
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Autor não encontrada no sistema."));
     }
 
     private String tratarNome(String nome) {
-        if (nome == null) return null;
+        if (nome == null)
+            return null;
         return nome.trim().toUpperCase();
     }
 
     private String tratarNacionalidade(String nacionalidade) {
-        if (nacionalidade == null) return null;
+        if (nacionalidade == null)
+            return null;
         return nacionalidade.trim().toUpperCase();
     }
 

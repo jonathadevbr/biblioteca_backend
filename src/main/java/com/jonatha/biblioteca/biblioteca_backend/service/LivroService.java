@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.livro.LivroCreateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.livro.LivroUpdateRequestDTO;
@@ -39,10 +40,12 @@ public class LivroService {
         this.categoriaRepository = categoriaRepository;
     }
 
+    @Transactional(readOnly = true)
     public Page<LivroResponseDTO> getAllLivroService(Pageable pageable) {
         return repository.findAll(pageable).map(LivroResponseDTO::new);
     }
 
+    @Transactional
     public LivroResponseDTO createLivroService(LivroCreateRequestDTO request) {
         String isbnLimpo = request.isbn() != null ? request.isbn().replaceAll("\\D", "") : null;
 
@@ -72,12 +75,14 @@ public class LivroService {
         return new LivroResponseDTO(livro);
     }
 
+    @Transactional(readOnly = true)
     public LivroResponseDTO getLivroService(UUID id) {
         Livro livro = buscarLivroPorId(id);
 
         return new LivroResponseDTO(livro);
     }
 
+    @Transactional
     public LivroResponseDTO updateLivroService(UUID id, LivroUpdateRequestDTO request) {
         Livro livro = buscarLivroPorId(id);
 
@@ -117,6 +122,7 @@ public class LivroService {
         return new LivroResponseDTO(livro);
     }
 
+    @Transactional
     public void deleteLivroService(UUID id) {
         Livro livro = buscarLivroPorId(id);
 

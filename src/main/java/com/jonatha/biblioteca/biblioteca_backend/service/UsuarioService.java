@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.usuario.UsuarioUpdateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.usuario.UsuarioCreateRequestDTO;
@@ -23,10 +24,12 @@ public class UsuarioService {
         this.repository = repository;
     }
 
+    @Transactional(readOnly = true)
     public Page<UsuarioResponseDTO> getAllUsuarioService(Pageable pageable) {
         return repository.findAll(pageable).map(UsuarioResponseDTO::new);
     }
 
+    @Transactional
     public UsuarioResponseDTO createUsuarioService(UsuarioCreateRequestDTO request) {
         String cpfLimpo = request.cpf() != null ? request.cpf().replaceAll("\\D", "") : null;
 
@@ -47,12 +50,14 @@ public class UsuarioService {
         return new UsuarioResponseDTO(usuario);
     }
 
+    @Transactional(readOnly = true)
     public UsuarioResponseDTO getUsuarioService(UUID id) {
         Usuario usuario = buscarUsuarioPorId(id);
 
         return new UsuarioResponseDTO(usuario);
     }
 
+    @Transactional
     public UsuarioResponseDTO updateUsuarioService(UUID id, UsuarioUpdateRequestDTO request) {
         Usuario usuario = buscarUsuarioPorId(id);
 
@@ -77,6 +82,7 @@ public class UsuarioService {
         return new UsuarioResponseDTO(usuario);
     }
 
+    @Transactional
     public void deleteUsuarioService(UUID id) {
         Usuario usuario = buscarUsuarioPorId(id);
 

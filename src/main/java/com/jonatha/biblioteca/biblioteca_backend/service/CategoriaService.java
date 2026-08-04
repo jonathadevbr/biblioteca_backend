@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.categoria.CategoriaCreateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.categoria.CategoriaUpdateRequestDTO;
@@ -23,10 +24,12 @@ public class CategoriaService {
         this.repository = repository;
     }
 
+    @Transactional(readOnly = true)
     public Page<CategoriaResponseDTO> getAllCategoriaService(Pageable pageable) {
         return repository.findAll(pageable).map(CategoriaResponseDTO::new);
     }
-
+    
+    @Transactional
     public CategoriaResponseDTO createCategoriaService(CategoriaCreateRequestDTO request) {
         String nomeTratado = tratarNome(request.nome());
         String descricaoTratada = tratarDescricao(request.descricao());
@@ -47,12 +50,14 @@ public class CategoriaService {
         return new CategoriaResponseDTO(categoria);
     }
 
+    @Transactional(readOnly = true)
     public CategoriaResponseDTO getCategoriaService(UUID id) {
         Categoria categoria = buscarCategoriaPorId(id);
 
             return new CategoriaResponseDTO(categoria);
     }
 
+    @Transactional
     public CategoriaResponseDTO updateCategoriaService(UUID id, CategoriaUpdateRequestDTO request) {
         Categoria categoria = buscarCategoriaPorId(id);
 
@@ -79,6 +84,7 @@ public class CategoriaService {
         return new CategoriaResponseDTO(categoria);
     }
 
+    @Transactional
     public void deleteCategoriaService(UUID id) {
         Categoria categoria = buscarCategoriaPorId(id);
 
