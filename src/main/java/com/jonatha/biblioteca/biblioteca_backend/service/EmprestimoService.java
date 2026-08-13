@@ -102,6 +102,13 @@ public class EmprestimoService {
          
     }
 
+    @Transactional
+    public void deleteEmprestimoService(UUID id) {
+        Emprestimo emprestimo = buscarEmprestimoPorId(id);
+
+        repository.delete(emprestimo);
+    }
+
     private Emprestimo buscarEmprestimoPorId(UUID id) {
         return repository.findById(id)
             .orElseThrow(() -> new NotFoundException("Empréstimo não encontrado no sistema."));
