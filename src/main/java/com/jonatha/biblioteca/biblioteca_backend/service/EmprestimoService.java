@@ -2,6 +2,7 @@ package com.jonatha.biblioteca.biblioteca_backend.service;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,5 +53,17 @@ public class EmprestimoService {
 
         emprestimo = repository.save(emprestimo);
         return new EmprestimoResponseDTO(emprestimo);
+    }
+
+    @Transactional
+    public EmprestimoResponseDTO getEmprestimoService(UUID id) {
+        Emprestimo emprestimo = buscarEmprestimoPorId(id);
+
+        return new EmprestimoResponseDTO(emprestimo);
+    }
+
+    private Emprestimo buscarEmprestimoPorId(UUID id) {
+        return repository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Empréstimo não encontrado no sistema."));
     }
 }
