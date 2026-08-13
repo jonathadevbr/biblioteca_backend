@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.emprestimo.EmprestimoCreateRequestDTO;
+import com.jonatha.biblioteca.biblioteca_backend.dto.request.emprestimo.EmprestimoUpdateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.response.EmprestimoResponseDTO;
 import com.jonatha.biblioteca.biblioteca_backend.exception.NotFoundException;
 import com.jonatha.biblioteca.biblioteca_backend.model.Emprestimo;
@@ -60,6 +61,45 @@ public class EmprestimoService {
         Emprestimo emprestimo = buscarEmprestimoPorId(id);
 
         return new EmprestimoResponseDTO(emprestimo);
+    }
+
+    @Transactional
+    public EmprestimoResponseDTO updateEmprestimoService(UUID id, EmprestimoUpdateRequestDTO request) {
+        Emprestimo emprestimo = buscarEmprestimoPorId(id);
+
+        if (request.idUsuario() != null) {
+            Usuario usuario = usuarioRepository.findById(request.idUsuario())
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
+            emprestimo.setUsuario(usuario);
+        }
+
+        if (request.idsLivro() != null) {
+            Set<Livro> livros = new HashSet<>(livroRepository.findAllById(request.idsLivro()));
+
+            if (livros.size() != new HashSet<>(request.idsLivro()).size()) {
+                throw new NotFoundException("Um ou mais livros não foram encontrados.");
+            }
+        }
+
+        if (request.dataEmprestimo() != null) {
+            emprestimo.setDataEmprestimo(request.dataEmprestimo());
+        }
+
+        if (request.dataPrevisaoDevolucao() != null) {
+            emprestimo.setDataPrevisaoDevolucao(request.dataPrevisaoDevolucao());
+        }
+
+        if (request.dataDevolucaoReal() != null) {
+            emprestimo.setDataDevolucaoReal(request.dataDevolucaoReal());
+        }
+
+        if (request.status() != null) {
+            emprestimo.setStatus(request.status());
+        }
+        
+        emprestimo = repository.save(emprestimo);
+        return new EmprestimoResponseDTO(emprestimo);
+         
     }
 
     private Emprestimo buscarEmprestimoPorId(UUID id) {

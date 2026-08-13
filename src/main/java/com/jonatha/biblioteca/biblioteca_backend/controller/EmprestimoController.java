@@ -8,13 +8,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.emprestimo.EmprestimoCreateRequestDTO;
+import com.jonatha.biblioteca.biblioteca_backend.dto.request.emprestimo.EmprestimoUpdateRequestDTO;
+import com.jonatha.biblioteca.biblioteca_backend.dto.request.livro.LivroUpdateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.response.EmprestimoResponseDTO;
+import com.jonatha.biblioteca.biblioteca_backend.dto.response.LivroResponseDTO;
 import com.jonatha.biblioteca.biblioteca_backend.service.EmprestimoService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -79,4 +83,27 @@ public class EmprestimoController {
         return emprestimoService.getEmprestimoService(id);
     }
     
+    // PUT
+    @Operation(summary = "Atualizar um empréstimo já registrado no sistema.")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Empréstimo atualizado com sucesso."),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Dados inválidos fornecidos na requisição.",
+            content = @Content(schema = @Schema(hidden = true))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Empréstimo não encontrado na base de dados.",
+            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Empréstimo não encontrado no sistema."))),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Erro interno de servidor.",
+            content = @Content(schema = @Schema(hidden = true)))
+    })
+    @PutMapping("/{id}")
+    public EmprestimoResponseDTO updateEmprestimoController(@PathVariable UUID id, @RequestBody EmprestimoUpdateRequestDTO request) {        
+        return emprestimoService.updateEmprestimoService(id, request);
+    }
 }
