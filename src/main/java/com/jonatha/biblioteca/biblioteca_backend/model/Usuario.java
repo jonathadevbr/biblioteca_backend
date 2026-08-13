@@ -36,4 +36,5 @@ public class Usuario {
 
     @Column(name = "celular", nullable = false, length = 11)
     private String celular;
+
 }
