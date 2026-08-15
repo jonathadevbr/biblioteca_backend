@@ -43,11 +43,11 @@ public class CategoriaController {
     }
 
     // GET ALL
-    @Operation(summary = "Busca todos as categorias do sistema.")
+    @Operation(summary = "Busca todas as categorias do sistema.")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200",
-            description = "Categorias listados com sucesso."),
+            description = "Categorias listadas com sucesso."),
         @ApiResponse(
             responseCode = "500",
             description = "Erro interno do servidor.",
@@ -59,11 +59,11 @@ public class CategoriaController {
     }
 
     // POST
-    @Operation(summary = "Cria uma categoria novo no sistema.")
+    @Operation(summary = "Cria uma categoria nova no sistema.")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "201",
-            description = "Categoria criado com sucesso."),
+            description = "Categoria criada com sucesso."),
         @ApiResponse(
             responseCode = "400",
             description = "Dados inválidos fornecidos na requisição.",
@@ -84,11 +84,11 @@ public class CategoriaController {
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200",
-            description = "Categoria encontrado com sucesso."),
+            description = "Categoria encontrada com sucesso."),
         @ApiResponse(
             responseCode = "404",
-            description = "Categoria não encontrado na base de dados.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Categoria não encontrado no sistema."))),
+            description = "Categoria não encontrada na base de dados.",
+            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Categoria não encontrada no sistema."))),
         @ApiResponse(
             responseCode = "500",
             description = "Erro interno de servidor.",
@@ -100,19 +100,19 @@ public class CategoriaController {
     }
     
     // PUT
-    @Operation(summary = "Atualizar uma categoria já registrado no sistema.")
+    @Operation(summary = "Atualizar uma categoria já registrada no sistema.")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200",
-            description = "Categoria atualizado com sucesso."),
+            description = "Categoria atualizada com sucesso."),
         @ApiResponse(
             responseCode = "400",
             description = "Dados inválidos fornecidos na requisição.",
             content = @Content(schema = @Schema(hidden = true))),
         @ApiResponse(
             responseCode = "404",
-            description = "Categoria não encontrado na base de dados.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Categoria não encontrado no sistema."))),
+            description = "Categoria não encontrada na base de dados.",
+            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Categoria não encontrada no sistema."))),
         @ApiResponse(
             responseCode = "409",
             description = "Nome ou descrição já cadastrado.",
@@ -128,15 +128,15 @@ public class CategoriaController {
     }
 
     // DELETE
-    @Operation(summary = "Deletar uma categoria já registrado no sistema.")
+    @Operation(summary = "Deletar uma categoria já registrada no sistema.")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "204",
-            description = "Categoria deletado com sucesso."),
+            description = "Categoria deletada com sucesso."),
         @ApiResponse(
             responseCode = "404",
-            description = "Categoria não encontrado na base de dados.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Categoria não encontrado no sistema."))),
+            description = "Categoria não encontrada na base de dados.",
+            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Categoria não encontrada no sistema."))),
         @ApiResponse(
             responseCode = "500",
             description = "Erro interno de servidor.",
