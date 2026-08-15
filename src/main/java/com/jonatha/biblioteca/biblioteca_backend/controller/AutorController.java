@@ -21,10 +21,6 @@ import com.jonatha.biblioteca.biblioteca_backend.service.AutorService;
 
 import org.springframework.http.HttpStatus;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -37,18 +33,9 @@ public class AutorController {
     public AutorController(AutorService autorService) {
         this.autorService = autorService;
     }
-    
+
     // GET ALL
     @Operation(summary = "Busca todos os autores do sistema.")
-    @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Autores listados com sucesso."),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Erro interno do servidor.",
-            content = @Content(schema = @Schema(hidden = true)))
-    })
     @GetMapping
     public Page<AutorResponseDTO> getAllAutorController(Pageable pageable) {
         return autorService.getAllAutorService(pageable);
@@ -56,19 +43,6 @@ public class AutorController {
 
     // POST
     @Operation(summary = "Cria um autor novo no sistema.")
-    @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "201",
-            description = "Autor criado com sucesso."),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Dados inválidos fornecidos na requisição.",
-            content = @Content(schema = @Schema(hidden = true))),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Erro interno de servidor.",
-            content = @Content(schema = @Schema(hidden = true)))
-    })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public AutorResponseDTO createAutorController(@Valid @RequestBody AutorCreateRequestDTO request) {
@@ -77,19 +51,6 @@ public class AutorController {
 
     // GET
     @Operation(summary = "Buscar um autor por ID no sistema.")
-    @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Autor encontrado com sucesso."),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Autor não encontrado na base de dados.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Autor não encontrado no sistema."))),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Erro interno de servidor.",
-            content = @Content(schema = @Schema(hidden = true)))
-    })
     @GetMapping("/{id}")
     public AutorResponseDTO getAutorController(@PathVariable UUID id) {
         return autorService.getAutorService(id);
@@ -97,43 +58,13 @@ public class AutorController {
 
     // PUT
     @Operation(summary = "Atualizar um autor já registrado no sistema.")
-    @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Autor atualizado com sucesso."),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Dados inválidos fornecidos na requisição.",
-            content = @Content(schema = @Schema(hidden = true))),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Autor não encontrado na base de dados.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Autor não encontrado no sistema."))),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Erro interno de servidor.",
-            content = @Content(schema = @Schema(hidden = true)))
-    })
     @PutMapping("/{id}")
-    public AutorResponseDTO updateAutorController(@PathVariable UUID id, @Valid @RequestBody AutorUpdateRequestDTO  request) {
+    public AutorResponseDTO updateAutorController(@PathVariable UUID id, @Valid @RequestBody AutorUpdateRequestDTO request) {
         return autorService.updateAutorService(id, request);
     }
 
     // DELETE
     @Operation(summary = "Deletar um autor já registrado no sistema.")
-    @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "Autor deletado com sucesso."),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Autor não encontrado na base de dados.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Autor não encontrado no sistema."))),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Erro interno de servidor.",
-            content = @Content(schema = @Schema(hidden = true)))
-    })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAutorController(@PathVariable UUID id) {

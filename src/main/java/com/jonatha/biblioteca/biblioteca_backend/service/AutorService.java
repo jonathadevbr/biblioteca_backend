@@ -11,6 +11,7 @@ import com.jonatha.biblioteca.biblioteca_backend.dto.request.autor.AutorCreateRe
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.autor.AutorUpdateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.response.AutorResponseDTO;
 import com.jonatha.biblioteca.biblioteca_backend.exception.NotFoundException;
+import com.jonatha.biblioteca.biblioteca_backend.mapper.AutorMapper;
 import com.jonatha.biblioteca.biblioteca_backend.model.Autor;
 import com.jonatha.biblioteca.biblioteca_backend.repository.AutorRepository;
 
@@ -25,25 +26,25 @@ public class AutorService {
 
     @Transactional(readOnly = true)
     public Page<AutorResponseDTO> getAllAutorService(Pageable pageable) {
-        return repository.findAll(pageable).map(AutorResponseDTO::new);
+        return repository.findAll(pageable).map(AutorMapper::toDTO);
     }
 
     @Transactional
     public AutorResponseDTO createAutorService(AutorCreateRequestDTO request) {
-        Autor autor = request.createAutor();
+        Autor autor = AutorMapper.toEntity(request);
 
-        autor.setNome(tratarNome(request.nome()));
-        autor.setNacionalidade(tratarNacionalidade(request.nacionalidade()));
+        autor.setNome(tratarNome(autor.getNome()));
+        autor.setNacionalidade(tratarNacionalidade(autor.getNacionalidade()));
 
         autor = repository.save(autor);
-        return new AutorResponseDTO(autor);
+        return AutorMapper.toDTO(autor);
     }
 
     @Transactional(readOnly = true)
     public AutorResponseDTO getAutorService(UUID id) {
         Autor autor = buscarAutorPorId(id);
 
-        return new AutorResponseDTO(autor);
+        return AutorMapper.toDTO(autor);
     }
 
     @Transactional
@@ -58,9 +59,7 @@ public class AutorService {
             autor.setNacionalidade(tratarNacionalidade(request.nacionalidade()));
         }
 
-        autor = repository.save(autor);
-
-        return new AutorResponseDTO(autor);
+        return AutorMapper.toDTO(autor);
     }
 
     @Transactional
@@ -72,7 +71,7 @@ public class AutorService {
 
     private Autor buscarAutorPorId(UUID id) {
         return repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Autor não encontrada no sistema."));
+                .orElseThrow(() -> new NotFoundException("Autor não encontrado no sistema."));
     }
 
     private String tratarNome(String nome) {
