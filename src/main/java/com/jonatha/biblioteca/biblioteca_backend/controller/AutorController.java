@@ -29,7 +29,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/v2/biblioteca/autor")
+@RequestMapping("/biblioteca/autor")
 @Tag(name = "Autor", description = "Endpoints para gerenciamento de autores no sistema")
 public class AutorController {
     private final AutorService autorService;

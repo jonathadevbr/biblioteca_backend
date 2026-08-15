@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@RequestMapping("/v2/biblioteca/categoria")
+@RequestMapping("/biblioteca/categoria")
 @Tag(name = "Categoria", description = "Endpoints para gerenciamento de categorias do sistema")
 public class CategoriaController {
     private final CategoriaService categoriaService;
