@@ -15,7 +15,7 @@ public class AutorMapper {
         return autor;
     }
 
-    // SÁIDA de dados
+    // SAÍDA de dados
     public static AutorResponseDTO toDTO(Autor autor) {
         if (autor == null) return null;
 
