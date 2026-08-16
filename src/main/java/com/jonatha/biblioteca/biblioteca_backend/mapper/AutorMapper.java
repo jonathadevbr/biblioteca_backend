@@ -6,7 +6,7 @@ import com.jonatha.biblioteca.biblioteca_backend.model.Autor;
 
 public class AutorMapper {
     // ENTRADA de dados
-    public static Autor toEntity(AutorCreateRequestDTO request) {
+    public static Autor toEntityAutor(AutorCreateRequestDTO request) {
         if (request == null) return null;
 
         Autor autor = new Autor();
@@ -16,7 +16,7 @@ public class AutorMapper {
     }
 
     // SAÍDA de dados
-    public static AutorResponseDTO toDTO(Autor autor) {
+    public static AutorResponseDTO toDTOAutor(Autor autor) {
         if (autor == null) return null;
 
         return new AutorResponseDTO(
