@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 
 public record LivroUpdateRequestDTO(
 
-    @Size(min = 1, max = 100, message = "O título do livro deve ter entre 5 e 100 caracteres.")
+    @Size(max = 100, message = "O título do livro deve ter no máximo 100 caracteres.")
     String titulo,
 
     List<UUID> idsAutores,
