@@ -23,6 +23,4 @@ public record LivroUpdateRequestDTO(
     @Positive(message = "A quantidade deve ser maior que zero.")
     Integer quantidade
 
-) {
-
-}
+) { }

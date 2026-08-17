@@ -10,6 +10,4 @@ public record CategoriaUpdateRequestDTO(
     @Size(min = 5, max = 255, message = "A descrição da categoria deve ter entre 5 e 255 caracteres")
     String descricao
 
-) {
-    
-}
+) { }

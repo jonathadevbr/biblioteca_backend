@@ -6,4 +6,4 @@ public record AutorResponseDTO(
     UUID id,
     String nome,
     String nacionalidade
-) {}
+) { }

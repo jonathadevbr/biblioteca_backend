@@ -9,6 +9,4 @@ public record AutorUpdateRequestDTO(
 
     @Size(min = 5, max = 255, message = "A nacionalidade do autor deve ter entre 5 e 255 caracteres")
     String nacionalidade
-) {
-    
-}
+) { }
