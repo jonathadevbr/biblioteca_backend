@@ -26,25 +26,25 @@ public class AutorService {
 
     @Transactional(readOnly = true)
     public Page<AutorResponseDTO> getAllAutorService(Pageable pageable) {
-        return repository.findAll(pageable).map(AutorMapper::toDTO);
+        return repository.findAll(pageable).map(AutorMapper::toDTOAutor);
     }
 
     @Transactional
     public AutorResponseDTO createAutorService(AutorCreateRequestDTO request) {
-        Autor autor = AutorMapper.toEntity(request);
+        Autor autor = AutorMapper.toEntityAutor(request);
 
         autor.setNome(tratarNome(autor.getNome()));
         autor.setNacionalidade(tratarNacionalidade(autor.getNacionalidade()));
 
         autor = repository.save(autor);
-        return AutorMapper.toDTO(autor);
+        return AutorMapper.toDTOAutor(autor);
     }
 
     @Transactional(readOnly = true)
     public AutorResponseDTO getAutorService(UUID id) {
         Autor autor = buscarAutorPorId(id);
 
-        return AutorMapper.toDTO(autor);
+        return AutorMapper.toDTOAutor(autor);
     }
 
     @Transactional
@@ -59,7 +59,8 @@ public class AutorService {
             autor.setNacionalidade(tratarNacionalidade(request.nacionalidade()));
         }
 
-        return AutorMapper.toDTO(autor);
+        autor = repository.save(autor);
+        return AutorMapper.toDTOAutor(autor);
     }
 
     @Transactional
