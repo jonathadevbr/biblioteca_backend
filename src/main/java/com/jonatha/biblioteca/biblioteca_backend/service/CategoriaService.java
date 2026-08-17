@@ -82,6 +82,7 @@ public class CategoriaService {
             categoria.setDescricao(descricaoTratada);
         }
 
+        categoria = repository.save(categoria);
         return CategoriaMapper.toDTOCategoria(categoria);
     }
 
