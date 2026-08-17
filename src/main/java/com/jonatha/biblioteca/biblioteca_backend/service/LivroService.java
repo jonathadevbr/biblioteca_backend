@@ -15,6 +15,7 @@ import com.jonatha.biblioteca.biblioteca_backend.dto.request.livro.LivroUpdateRe
 import com.jonatha.biblioteca.biblioteca_backend.dto.response.LivroResponseDTO;
 import com.jonatha.biblioteca.biblioteca_backend.exception.ConflictException;
 import com.jonatha.biblioteca.biblioteca_backend.exception.NotFoundException;
+import com.jonatha.biblioteca.biblioteca_backend.mapper.LivroMapper;
 import com.jonatha.biblioteca.biblioteca_backend.model.Autor;
 import com.jonatha.biblioteca.biblioteca_backend.model.Categoria;
 import com.jonatha.biblioteca.biblioteca_backend.model.Livro;
@@ -42,23 +43,19 @@ public class LivroService {
 
     @Transactional(readOnly = true)
     public Page<LivroResponseDTO> getAllLivroService(Pageable pageable) {
-        return repository.findAll(pageable).map(LivroResponseDTO::new);
+        return repository.findAll(pageable).map(LivroMapper::toDTOLivro);
     }
 
     @Transactional
     public LivroResponseDTO createLivroService(LivroCreateRequestDTO request) {
         String isbnLimpo = request.isbn() != null ? request.isbn().replaceAll("\\D", "") : null;
+        String tituloTratado = tratarTitulo(request.titulo());
 
-        if (repository.existsByTitulo(request.titulo())) {
-            throw new ConflictException("Título já cadastrado.");
-        }
-
-        if (repository.existsByIsbn(isbnLimpo)) {
-            throw new ConflictException("ISBN já cadastrado.");
-        }
+        if (repository.existsByTitulo(request.titulo())) throw new ConflictException("Título já cadastrado.");
+        if (repository.existsByIsbn(isbnLimpo)) throw new ConflictException("ISBN já cadastrado.");
+        
 
         Set<Autor> autores = new HashSet<>(autorRepository.findAllById(request.idsAutores()));
-
         if (autores.size() != new HashSet<>(request.idsAutores()).size()) {
             throw new NotFoundException("Um ou mais autores não foram encontrados.");
         }
@@ -66,29 +63,28 @@ public class LivroService {
         Categoria categoria = categoriaRepository.findById(request.idCategoria())
             .orElseThrow(() -> new NotFoundException("Categoria não encontrada."));
 
-        Livro livro = request.createLivro(autores, categoria);
+        
+        Livro livro = LivroMapper.toEntityLivro(request, autores, categoria);
 
-        livro.setTitulo(tratarTitulo(request.titulo()));
+        livro.setTitulo(tituloTratado);
         livro.setIsbn(isbnLimpo);
 
         livro = repository.save(livro);
-        return new LivroResponseDTO(livro);
+        return LivroMapper.toDTOLivro(livro);
     }
 
     @Transactional(readOnly = true)
     public LivroResponseDTO getLivroService(UUID id) {
         Livro livro = buscarLivroPorId(id);
 
-        return new LivroResponseDTO(livro);
+        return LivroMapper.toDTOLivro(livro);
     }
 
     @Transactional
     public LivroResponseDTO updateLivroService(UUID id, LivroUpdateRequestDTO request) {
         Livro livro = buscarLivroPorId(id);
 
-        if (request.titulo() != null) {
-            livro.setTitulo(tratarTitulo(request.titulo()));
-        }
+        if (request.titulo() != null) livro.setTitulo(tratarTitulo(request.titulo()));
 
         if (request.idsAutores() != null) {
             Set<Autor> autores = new HashSet<>(autorRepository.findAllById(request.idsAutores()));
@@ -106,20 +102,12 @@ public class LivroService {
             livro.setCategoria(categoria);
         }
 
-        if (request.anoPublicacao() != null) {
-            livro.setAnoPublicacao(request.anoPublicacao());
-        }
-
-        if (request.editora() != null) {
-            livro.setEditora(tratarEditora(request.editora()));
-        }
-
-        if (request.quantidade() != null) {
-            livro.setQuantidade(request.quantidade());
-        }
+        if (request.anoPublicacao() != null) livro.setAnoPublicacao(request.anoPublicacao());
+        if (request.editora() != null) livro.setEditora(tratarEditora(request.editora()));
+        if (request.quantidade() != null) livro.setQuantidade(request.quantidade());
 
         livro = repository.save(livro);
-        return new LivroResponseDTO(livro);
+        return LivroMapper.toDTOLivro(livro);
     }
 
     @Transactional

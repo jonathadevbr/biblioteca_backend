@@ -10,6 +10,7 @@ import com.jonatha.biblioteca.biblioteca_backend.dto.response.LivroResponseDTO;
 import com.jonatha.biblioteca.biblioteca_backend.service.LivroService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 
 
@@ -46,7 +48,9 @@ public class LivroController {
             content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping
-    public Page<LivroResponseDTO> getAllLivroController(Pageable pageable) {
+    public Page<LivroResponseDTO> getAllLivroController(
+            @Parameter(hidden = true) 
+            @PageableDefault(size = 10, sort = "titulo") Pageable pageable) {
         return livroService.getAllLivroService(pageable);
     }
 
