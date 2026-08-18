@@ -12,6 +12,7 @@ import com.jonatha.biblioteca.biblioteca_backend.dto.request.usuario.UsuarioCrea
 import com.jonatha.biblioteca.biblioteca_backend.dto.response.UsuarioResponseDTO;
 import com.jonatha.biblioteca.biblioteca_backend.exception.ConflictException;
 import com.jonatha.biblioteca.biblioteca_backend.exception.NotFoundException;
+import com.jonatha.biblioteca.biblioteca_backend.mapper.UsuarioMapper;
 import com.jonatha.biblioteca.biblioteca_backend.model.Usuario;
 import com.jonatha.biblioteca.biblioteca_backend.repository.UsuarioRepository;
 
@@ -26,60 +27,52 @@ public class UsuarioService {
 
     @Transactional(readOnly = true)
     public Page<UsuarioResponseDTO> getAllUsuarioService(Pageable pageable) {
-        return repository.findAll(pageable).map(UsuarioResponseDTO::new);
+        return repository.findAll(pageable).map(UsuarioMapper::toDTOUsuario);
     }
 
     @Transactional
     public UsuarioResponseDTO createUsuarioService(UsuarioCreateRequestDTO request) {
         String cpfLimpo = request.cpf() != null ? request.cpf().replaceAll("\\D", "") : null;
+        String nomeTratado = tratarNome(request.nome());
 
-        if (repository.existsByCpf(cpfLimpo)) {
+        if (repository.existsByCpf(cpfLimpo))
             throw new ConflictException("CPF já cadastrado.");
-        }
-
-        if (repository.existsByEmail(request.email())) {
+        if (repository.existsByEmail(request.email()))
             throw new ConflictException("Email já cadastrado.");
-        }
 
-        Usuario usuario = request.createUsuario();
+        Usuario usuario = UsuarioMapper.toEntityUsuario(request);
 
-        usuario.setNome(tratarNome(request.nome()));
+        usuario.setNome(nomeTratado);
         usuario.setCpf(cpfLimpo);
 
         usuario = repository.save(usuario);
-        return new UsuarioResponseDTO(usuario);
+        return UsuarioMapper.toDTOUsuario(usuario);
     }
 
     @Transactional(readOnly = true)
     public UsuarioResponseDTO getUsuarioService(UUID id) {
         Usuario usuario = buscarUsuarioPorId(id);
 
-        return new UsuarioResponseDTO(usuario);
+        return UsuarioMapper.toDTOUsuario(usuario);
     }
 
     @Transactional
     public UsuarioResponseDTO updateUsuarioService(UUID id, UsuarioUpdateRequestDTO request) {
         Usuario usuario = buscarUsuarioPorId(id);
 
-        if (repository.existsByEmailAndIdNot(request.email(), id)) {
-            throw new ConflictException("Email já cadastrado.");
-        }
-
-        if (request.nome() != null) {
-            usuario.setNome(tratarNome(request.nome()));
-        }
-
-        if (request.celular() != null) {
-            usuario.setCelular(request.celular());
-        }
-
         if (request.email() != null) {
+            if (repository.existsByEmailAndIdNot(request.email(), id)) {
+                throw new ConflictException("Email já cadastrado.");
+            }
             usuario.setEmail(request.email());
         }
 
+        if (request.nome() != null) usuario.setNome(tratarNome(request.nome()));
+        if (request.celular() != null) usuario.setCelular(request.celular());
+
         usuario = repository.save(usuario);
 
-        return new UsuarioResponseDTO(usuario);
+        return UsuarioMapper.toDTOUsuario(usuario);
     }
 
     @Transactional
@@ -91,7 +84,7 @@ public class UsuarioService {
 
     private Usuario buscarUsuarioPorId(UUID id) {
         return repository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Usuário não encontrado no sistema."));
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado no sistema."));
     }
 
     private String tratarNome(String nome) {
