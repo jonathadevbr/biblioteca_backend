@@ -2,7 +2,6 @@ package com.jonatha.biblioteca.biblioteca_backend.dto.request.usuario;
 
 import org.hibernate.validator.constraints.br.CPF;
 
-import com.jonatha.biblioteca.biblioteca_backend.model.Usuario;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +11,7 @@ import jakarta.validation.constraints.Size;
 public record UsuarioCreateRequestDTO(
 
     @NotBlank(message = "O nome do usuário é obrigatório.")
-    @Size(min = 5, max = 100, message = "O nome do usuário deve ter entre 5 e 100 caracteres.")
+    @Size(max = 100, message = "O nome do usuário deve ter no máximo 100 caracteres.")
     String nome,
 
     @NotBlank(message = "O CPF do usuário é obrigatório.")
@@ -26,15 +25,4 @@ public record UsuarioCreateRequestDTO(
     @NotBlank(message = "O Número de celular do usuário é obrigatório.")
     @Pattern(regexp = "\\d{10,11}", message = "Celular deve ter 10 ou 11 dígitos.")
     String celular
-) {
-    public Usuario createUsuario() {
-        Usuario usuario = new Usuario();
-        
-        usuario.setNome(this.nome);
-        usuario.setCpf(this.cpf);
-        usuario.setEmail(this.email);
-        usuario.setCelular(this.celular);
-        
-        return usuario;
-    }
-}
+) { }
