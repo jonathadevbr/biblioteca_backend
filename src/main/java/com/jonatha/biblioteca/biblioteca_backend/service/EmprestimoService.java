@@ -13,6 +13,7 @@ import com.jonatha.biblioteca.biblioteca_backend.dto.request.emprestimo.Empresti
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.emprestimo.EmprestimoUpdateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.response.EmprestimoResponseDTO;
 import com.jonatha.biblioteca.biblioteca_backend.exception.NotFoundException;
+import com.jonatha.biblioteca.biblioteca_backend.mapper.EmprestimoMapper;
 import com.jonatha.biblioteca.biblioteca_backend.model.Emprestimo;
 import com.jonatha.biblioteca.biblioteca_backend.model.Livro;
 import com.jonatha.biblioteca.biblioteca_backend.model.Usuario;
@@ -22,16 +23,15 @@ import com.jonatha.biblioteca.biblioteca_backend.repository.UsuarioRepository;
 
 @Service
 public class EmprestimoService {
-    
+
     private final EmprestimoRepository repository;
     private final UsuarioRepository usuarioRepository;
     private final LivroRepository livroRepository;
 
     public EmprestimoService(
-        EmprestimoRepository repository,
-        UsuarioRepository usuarioRepository,
-        LivroRepository livroRepository
-    ) {
+            EmprestimoRepository repository,
+            UsuarioRepository usuarioRepository,
+            LivroRepository livroRepository) {
         this.repository = repository;
         this.usuarioRepository = usuarioRepository;
         this.livroRepository = livroRepository;
@@ -39,28 +39,30 @@ public class EmprestimoService {
 
     @Transactional(readOnly = true)
     public Page<EmprestimoResponseDTO> getAllEmprestimoService(Pageable pageable) {
-        return repository.findAll(pageable).map(EmprestimoResponseDTO::new);
+        return repository.findAll(pageable).map(EmprestimoMapper::toDTOEmprestimo);
     }
 
     @Transactional
     public EmprestimoResponseDTO createEmprestimoSerivce(EmprestimoCreateRequestDTO request) {
-
         Set<Livro> livros = new HashSet<>(livroRepository.findAllById(request.idsLivro()));
 
-        Usuario usuario = usuarioRepository.findById(request.idUsuario())
-            .orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
+        if (livros.isEmpty()) {
+            throw new NotFoundException("Nenhum livro válido foi encontrado para os IDs informados.");
+        }
 
-        Emprestimo emprestimo = request.createEmprestimo(livros, usuario);
+        Usuario usuario = usuarioRepository.findById(request.idUsuario())
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
+
+        Emprestimo emprestimo = EmprestimoMapper.toEntityEmprestimo(request, usuario, livros);
 
         emprestimo = repository.save(emprestimo);
-        return new EmprestimoResponseDTO(emprestimo);
+        return EmprestimoMapper.toDTOEmprestimo(emprestimo);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public EmprestimoResponseDTO getEmprestimoService(UUID id) {
         Emprestimo emprestimo = buscarEmprestimoPorId(id);
-
-        return new EmprestimoResponseDTO(emprestimo);
+        return EmprestimoMapper.toDTOEmprestimo(emprestimo);
     }
 
     @Transactional
@@ -69,7 +71,7 @@ public class EmprestimoService {
 
         if (request.idUsuario() != null) {
             Usuario usuario = usuarioRepository.findById(request.idUsuario())
-                .orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
+                    .orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
             emprestimo.setUsuario(usuario);
         }
 
@@ -79,6 +81,7 @@ public class EmprestimoService {
             if (livros.size() != new HashSet<>(request.idsLivro()).size()) {
                 throw new NotFoundException("Um ou mais livros não foram encontrados.");
             }
+            emprestimo.setLivros(livros);
         }
 
         if (request.dataEmprestimo() != null) {
@@ -96,21 +99,19 @@ public class EmprestimoService {
         if (request.status() != null) {
             emprestimo.setStatus(request.status());
         }
-        
+
         emprestimo = repository.save(emprestimo);
-        return new EmprestimoResponseDTO(emprestimo);
-         
+        return EmprestimoMapper.toDTOEmprestimo(emprestimo);
     }
 
     @Transactional
     public void deleteEmprestimoService(UUID id) {
         Emprestimo emprestimo = buscarEmprestimoPorId(id);
-
         repository.delete(emprestimo);
     }
 
     private Emprestimo buscarEmprestimoPorId(UUID id) {
         return repository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Empréstimo não encontrado no sistema."));
+                .orElseThrow(() -> new NotFoundException("Empréstimo não encontrado no sistema."));
     }
 }
