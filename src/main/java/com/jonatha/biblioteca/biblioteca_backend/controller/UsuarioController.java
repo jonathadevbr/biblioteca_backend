@@ -9,6 +9,7 @@ import com.jonatha.biblioteca.biblioteca_backend.dto.response.UsuarioResponseDTO
 import com.jonatha.biblioteca.biblioteca_backend.service.UsuarioService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +32,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
-@RequestMapping("/v2/biblioteca/usuario")
+@RequestMapping("/biblioteca/usuario")
 @Tag(name = "Usuário", description = "Endpoints para gerenciamento de usuários no sistema")
 public class UsuarioController {
     private final UsuarioService usuarioService;
@@ -50,7 +52,8 @@ public class UsuarioController {
             content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping
-    public Page<UsuarioResponseDTO> getAllUsuarioController(Pageable pageable) {
+    public Page<UsuarioResponseDTO> getAllUsuarioController(
+        @Parameter(hidden = true) @PageableDefault(size = 10) Pageable pageable){
         return usuarioService.getAllUsuarioService(pageable);
     }
 
@@ -80,17 +83,9 @@ public class UsuarioController {
 
     @Operation(summary = "Buscar um usuário por ID no sistema.")
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Usuário encontrado com sucesso."),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Usuário não encontrado na base de dados.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Usuário não encontrado no sistema."))),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Erro interno de servidor.",
-            content = @Content(schema = @Schema(hidden = true)))
+            @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado na base de dados.", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Usuário não encontrado no sistema."))),
+            @ApiResponse(responseCode = "500", description = "Erro interno de servidor.", content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping("/{id}")
     public UsuarioResponseDTO getUsuarioController(@PathVariable UUID id) {
@@ -99,44 +94,23 @@ public class UsuarioController {
 
     @Operation(summary = "Atualizar um usuário já registrado no sistema.")
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Usuário atualizado com sucesso."),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Dados inválidos fornecidos na requisição.",
-            content = @Content(schema = @Schema(hidden = true))),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Usuário não encontrado na base de dados.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Usuário não encontrado no sistema."))),
-        @ApiResponse(
-            responseCode = "409",
-            description = "CPF ou e-mail já cadastrado por outro usuário.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "CPF já cadastrado."))),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Erro interno de servidor.",
-            content = @Content(schema = @Schema(hidden = true)))
+            @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso."),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos na requisição.", content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado na base de dados.", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Usuário não encontrado no sistema."))),
+            @ApiResponse(responseCode = "409", description = "CPF ou e-mail já cadastrado por outro usuário.", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "CPF já cadastrado."))),
+            @ApiResponse(responseCode = "500", description = "Erro interno de servidor.", content = @Content(schema = @Schema(hidden = true)))
     })
     @PutMapping("/{id}")
-    public UsuarioResponseDTO updateUsuarioController(@PathVariable UUID id, @Valid @RequestBody UsuarioUpdateRequestDTO  request) {
+    public UsuarioResponseDTO updateUsuarioController(@PathVariable UUID id,
+            @Valid @RequestBody UsuarioUpdateRequestDTO request) {
         return usuarioService.updateUsuarioService(id, request);
     }
 
     @Operation(summary = "Deletar um usuário já registrado no sistema.")
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "Usuário deletado com sucesso."),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Usuário não encontrado na base de dados.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Usuário não encontrado no sistema."))),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Erro interno de servidor.",
-            content = @Content(schema = @Schema(hidden = true)))
+            @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado na base de dados.", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Usuário não encontrado no sistema."))),
+            @ApiResponse(responseCode = "500", description = "Erro interno de servidor.", content = @Content(schema = @Schema(hidden = true)))
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
