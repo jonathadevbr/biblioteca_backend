@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import com.jonatha.biblioteca.biblioteca_backend.dto.response.EmprestimoResponse
 import com.jonatha.biblioteca.biblioteca_backend.service.EmprestimoService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
@@ -30,7 +32,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/v2/biblioteca/emprestimo")
+@RequestMapping("/biblioteca/emprestimo")
 @Tag(name = "Emprestimo", description = "Endpoints para gerenciamento de emprestimos no sistema.")
 public class EmprestimoController {
     private final EmprestimoService emprestimoService;
@@ -51,8 +53,9 @@ public class EmprestimoController {
             content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping
-    public Page<EmprestimoResponseDTO> getAllEmprestimoController(Pageable pageable) {
-        return emprestimoService.getAllEmprestimoService(pageable);
+    public Page<EmprestimoResponseDTO> getAllEmprestimoController(
+        @Parameter(hidden = true) @PageableDefault(size = 10) Pageable pageable) {
+            return emprestimoService.getAllEmprestimoService(pageable);
     }
 
     // POST

@@ -54,7 +54,7 @@ public class UsuarioController {
     @GetMapping
     public Page<UsuarioResponseDTO> getAllUsuarioController(
         @Parameter(hidden = true) @PageableDefault(size = 10) Pageable pageable){
-        return usuarioService.getAllUsuarioService(pageable);
+            return usuarioService.getAllUsuarioService(pageable);
     }
 
     @Operation(summary = "Cria um usuário novo no sistema.")

@@ -9,6 +9,7 @@ import com.jonatha.biblioteca.biblioteca_backend.dto.response.CategoriaResponseD
 import com.jonatha.biblioteca.biblioteca_backend.service.CategoriaService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,8 +56,9 @@ public class CategoriaController {
             content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping
-    public Page<CategoriaResponseDTO> getAllCategoriaController(Pageable pageable) {
-        return categoriaService.getAllCategoriaService(pageable);
+    public Page<CategoriaResponseDTO> getAllCategoriaController(
+        @Parameter(hidden = true) @PageableDefault(size = 10) Pageable pageable) {
+            return categoriaService.getAllCategoriaService(pageable);
     }
 
     // POST

@@ -49,9 +49,8 @@ public class LivroController {
     })
     @GetMapping
     public Page<LivroResponseDTO> getAllLivroController(
-            @Parameter(hidden = true) 
-            @PageableDefault(size = 10, sort = "titulo") Pageable pageable) {
-        return livroService.getAllLivroService(pageable);
+        @Parameter(hidden = true) @PageableDefault(size = 10) Pageable pageable) {
+            return livroService.getAllLivroService(pageable);
     }
 
     // POST
