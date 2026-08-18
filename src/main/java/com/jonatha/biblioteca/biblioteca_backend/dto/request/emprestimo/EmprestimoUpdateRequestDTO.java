@@ -20,6 +20,4 @@ public record EmprestimoUpdateRequestDTO(
     LocalDate dataDevolucaoReal,
 
     StatusEmprestimo status
-) {
-
-}
+) { }
