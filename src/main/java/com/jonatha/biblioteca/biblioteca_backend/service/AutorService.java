@@ -2,6 +2,8 @@ package com.jonatha.biblioteca.biblioteca_backend.service;
 
 import java.util.UUID;
 
+import com.jonatha.biblioteca.biblioteca_backend.exception.ConflictException;
+import com.jonatha.biblioteca.biblioteca_backend.repository.LivroRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,9 +21,11 @@ import com.jonatha.biblioteca.biblioteca_backend.repository.AutorRepository;
 public class AutorService {
 
     private final AutorRepository repository;
+    private final LivroRepository livroRepository;
 
-    public AutorService(AutorRepository repository) {
+    public AutorService(AutorRepository repository, LivroRepository livroRepository) {
         this.repository = repository;
+        this.livroRepository = livroRepository;
     }
 
     @Transactional(readOnly = true)
@@ -66,6 +70,10 @@ public class AutorService {
     @Transactional
     public void delete(UUID id) {
         Autor autor = buscarAutorPorId(id);
+
+        if (livroRepository.existsByAutoresId(id)) {
+            throw new ConflictException("Não é possível excluir o autor pois há livros vinculados a ele.");
+        }
 
         repository.delete(autor);
     }
