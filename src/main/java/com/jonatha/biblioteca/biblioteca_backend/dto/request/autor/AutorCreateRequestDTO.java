@@ -11,7 +11,7 @@ public record AutorCreateRequestDTO(
     String nome,
 
     @NotBlank(message = "A nacionalidade do autor é obrigatória.")
-    @Size(min = 5, max = 255, message = "A nacionalidade do autor deve ter entre 5 e 255 caracteres")
+    @Size(max = 255, message = "A nacionalidade do autor deve ter no máximo 255 caracteres")
     String nacionalidade
 
 ) { }
