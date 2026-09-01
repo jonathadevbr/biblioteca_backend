@@ -4,10 +4,10 @@ import jakarta.validation.constraints.Size;
 
 public record CategoriaUpdateRequestDTO(
 
-    @Size(min = 5, max = 255, message = "O nome da categoria deve ter entre 5 e 255 caracteres")
+    @Size(max = 255, message = "O nome da categoria deve ter no máximo 255 caracteres")
     String nome,
 
-    @Size(min = 5, max = 255, message = "A descrição da categoria deve ter entre 5 e 255 caracteres")
+    @Size(max = 255, message = "A descrição da categoria deve ter no máximo 255 caracteres")
     String descricao
 
 ) { }
