@@ -25,38 +25,38 @@ public class AutorService {
     }
 
     @Transactional(readOnly = true)
-    public Page<AutorResponseDTO> getAllAutorService(Pageable pageable) {
+    public Page<AutorResponseDTO> getAutorPage(Pageable pageable) {
         return repository.findAll(pageable).map(AutorMapper::toDTOAutor);
     }
 
     @Transactional
-    public AutorResponseDTO createAutorService(AutorCreateRequestDTO request) {
+    public AutorResponseDTO create(AutorCreateRequestDTO request) {
         Autor autor = AutorMapper.toEntityAutor(request);
 
-        autor.setNome(tratarNome(autor.getNome()));
-        autor.setNacionalidade(tratarNacionalidade(autor.getNacionalidade()));
+        autor.setNome(tratarTexto(autor.getNome()));
+        autor.setNacionalidade(tratarTexto(autor.getNacionalidade()));
 
         autor = repository.save(autor);
         return AutorMapper.toDTOAutor(autor);
     }
 
     @Transactional(readOnly = true)
-    public AutorResponseDTO getAutorService(UUID id) {
+    public AutorResponseDTO findById(UUID id) {
         Autor autor = buscarAutorPorId(id);
 
         return AutorMapper.toDTOAutor(autor);
     }
 
     @Transactional
-    public AutorResponseDTO updateAutorService(UUID id, AutorUpdateRequestDTO request) {
+    public AutorResponseDTO update(UUID id, AutorUpdateRequestDTO request) {
         Autor autor = buscarAutorPorId(id);
 
         if (request.nome() != null) {
-            autor.setNome(tratarNome(request.nome()));
+            autor.setNome(tratarTexto(request.nome()));
         }
 
         if (request.nacionalidade() != null) {
-            autor.setNacionalidade(tratarNacionalidade(request.nacionalidade()));
+            autor.setNacionalidade(tratarTexto(request.nacionalidade()));
         }
 
         autor = repository.save(autor);
@@ -64,7 +64,7 @@ public class AutorService {
     }
 
     @Transactional
-    public void deleteAutorService(UUID id) {
+    public void delete(UUID id) {
         Autor autor = buscarAutorPorId(id);
 
         repository.delete(autor);
@@ -75,16 +75,9 @@ public class AutorService {
                 .orElseThrow(() -> new NotFoundException("Autor não encontrado no sistema."));
     }
 
-    private String tratarNome(String nome) {
-        if (nome == null)
+    private String tratarTexto(String texto) {
+        if (texto == null)
             return null;
-        return nome.trim().toUpperCase();
+        return texto.trim().toUpperCase();
     }
-
-    private String tratarNacionalidade(String nacionalidade) {
-        if (nacionalidade == null)
-            return null;
-        return nacionalidade.trim().toUpperCase();
-    }
-
 }
