@@ -1,5 +1,6 @@
 package com.jonatha.biblioteca.biblioteca_backend.service;
 
+import java.util.Locale;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -26,16 +27,16 @@ public class CategoriaService {
     }
 
     @Transactional(readOnly = true)
-    public Page<CategoriaResponseDTO> getAllCategoriaService(Pageable pageable) {
+    public Page<CategoriaResponseDTO> getCategoriaPage(Pageable pageable) {
         return repository.findAll(pageable).map(CategoriaMapper::toDTOCategoria);
     }
 
     @Transactional
-    public CategoriaResponseDTO createCategoriaService(CategoriaCreateRequestDTO request) {
+    public CategoriaResponseDTO create(CategoriaCreateRequestDTO request) {
         Categoria categoria = CategoriaMapper.toEntityCategoria(request);
 
-        String nomeTratado = tratarNome(categoria.getNome());
-        String descricaoTratada = tratarDescricao(categoria.getDescricao());
+        String nomeTratado = tratarTexto(categoria.getNome());
+        String descricaoTratada = tratarTexto(categoria.getDescricao());
 
         if (repository.existsByNome(nomeTratado)) {
             throw new ConflictException("Nome de categoria já cadastrado.");
@@ -53,18 +54,18 @@ public class CategoriaService {
     }
 
     @Transactional(readOnly = true)
-    public CategoriaResponseDTO getCategoriaService(UUID id) {
+    public CategoriaResponseDTO findById(UUID id) {
         Categoria categoria = buscarCategoriaPorId(id);
 
         return CategoriaMapper.toDTOCategoria(categoria);
     }
 
     @Transactional
-    public CategoriaResponseDTO updateCategoriaService(UUID id, CategoriaUpdateRequestDTO request) {
+    public CategoriaResponseDTO update(UUID id, CategoriaUpdateRequestDTO request) {
         Categoria categoria = buscarCategoriaPorId(id);
 
-        String nomeTratado = tratarNome(request.nome());
-        String descricaoTratada = tratarDescricao(request.descricao());
+        String nomeTratado = tratarTexto(request.nome());
+        String descricaoTratada = tratarTexto(request.descricao());
 
         if (nomeTratado != null && repository.existsByNomeAndIdNot(nomeTratado, id)) {
             throw new ConflictException("Nome de categoria já cadastrado.");
@@ -87,7 +88,7 @@ public class CategoriaService {
     }
 
     @Transactional
-    public void deleteCategoriaService(UUID id) {
+    public void delete(UUID id) {
         Categoria categoria = buscarCategoriaPorId(id);
 
         repository.delete(categoria);
@@ -98,15 +99,9 @@ public class CategoriaService {
                 .orElseThrow(() -> new NotFoundException("Categoria não encontrada no sistema."));
     }
 
-    private String tratarNome(String nome) {
-        if (nome == null)
+    private String tratarTexto(String texto) {
+        if (texto == null)
             return null;
-        return nome.trim().toUpperCase();
-    }
-
-    private String tratarDescricao(String descricao) {
-        if (descricao == null)
-            return null;
-        return descricao.trim().toUpperCase();
+        return texto.trim().toUpperCase();
     }
 }

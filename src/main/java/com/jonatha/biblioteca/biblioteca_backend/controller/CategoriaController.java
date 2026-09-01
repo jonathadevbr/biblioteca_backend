@@ -35,119 +35,45 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@RequestMapping("/biblioteca/categoria")
+@RequestMapping("/categoria")
 @Tag(name = "Categoria", description = "Endpoints para gerenciamento de categorias do sistema")
 public class CategoriaController {
-    private final CategoriaService categoriaService;
+    private final CategoriaService service;
 
-    public CategoriaController(CategoriaService categoriaService) {
-        this.categoriaService = categoriaService;
+    public CategoriaController(CategoriaService service) {
+        this.service = service;
     }
 
-    // GET ALL
     @Operation(summary = "Busca todas as categorias do sistema.")
-    @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Categorias listadas com sucesso."),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Erro interno do servidor.",
-            content = @Content(schema = @Schema(hidden = true)))
-    })
     @GetMapping
-    public Page<CategoriaResponseDTO> getAllCategoriaController(
+    public Page<CategoriaResponseDTO> getCategoriaPage(
         @Parameter(hidden = true) @PageableDefault(size = 10) Pageable pageable) {
-            return categoriaService.getAllCategoriaService(pageable);
+            return service.getCategoriaPage(pageable);
     }
 
-    // POST
     @Operation(summary = "Cria uma categoria nova no sistema.")
-    @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "201",
-            description = "Categoria criada com sucesso."),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Dados inválidos fornecidos na requisição.",
-            content = @Content(schema = @Schema(hidden = true))),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Erro interno de servidor.",
-            content = @Content(schema = @Schema(hidden = true)))
-    })
-    @PostMapping()
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoriaResponseDTO createCategoriaController(@Valid @RequestBody CategoriaCreateRequestDTO request) {
-        return categoriaService.createCategoriaService(request);
+    public CategoriaResponseDTO create(@Valid @RequestBody CategoriaCreateRequestDTO request) {
+        return service.create(request);
     }
-    
-    // GET
+
     @Operation(summary = "Buscar uma categoria por ID no sistema.")
-    @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Categoria encontrada com sucesso."),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Categoria não encontrada na base de dados.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Categoria não encontrada no sistema."))),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Erro interno de servidor.",
-            content = @Content(schema = @Schema(hidden = true)))
-    })
     @GetMapping("/{id}")
-    public CategoriaResponseDTO getCategoriaController(@PathVariable UUID id) {
-        return categoriaService.getCategoriaService(id);
+    public CategoriaResponseDTO findById(@PathVariable UUID id) {
+        return service.findById(id);
     }
-    
-    // PUT
+
     @Operation(summary = "Atualizar uma categoria já registrada no sistema.")
-    @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Categoria atualizada com sucesso."),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Dados inválidos fornecidos na requisição.",
-            content = @Content(schema = @Schema(hidden = true))),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Categoria não encontrada na base de dados.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Categoria não encontrada no sistema."))),
-        @ApiResponse(
-            responseCode = "409",
-            description = "Nome ou descrição já cadastrado.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Nome já cadastrado."))),    
-        @ApiResponse(
-            responseCode = "500",
-            description = "Erro interno de servidor.",
-            content = @Content(schema = @Schema(hidden = true)))
-    })
     @PutMapping("/{id}")
     public CategoriaResponseDTO updateCategoriaController(@PathVariable UUID id, @Valid @RequestBody CategoriaUpdateRequestDTO request) {        
-        return categoriaService.updateCategoriaService(id, request);
+        return service.update(id, request);
     }
 
-    // DELETE
     @Operation(summary = "Deletar uma categoria já registrada no sistema.")
-    @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "Categoria deletada com sucesso."),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Categoria não encontrada na base de dados.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Categoria não encontrada no sistema."))),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Erro interno de servidor.",
-            content = @Content(schema = @Schema(hidden = true)))
-    })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCategoriaController(@PathVariable UUID id) {
-        categoriaService.deleteCategoriaService(id);
+    public void delete(@PathVariable UUID id) {
+        service.delete(id);
     }
 }
