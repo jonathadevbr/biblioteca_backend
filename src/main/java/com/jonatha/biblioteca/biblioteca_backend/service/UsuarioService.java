@@ -26,14 +26,14 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
-    public Page<UsuarioResponseDTO> getAllUsuarioService(Pageable pageable) {
+    public Page<UsuarioResponseDTO> getUsuarioPage(Pageable pageable) {
         return repository.findAll(pageable).map(UsuarioMapper::toDTOUsuario);
     }
 
     @Transactional
-    public UsuarioResponseDTO createUsuarioService(UsuarioCreateRequestDTO request) {
+    public UsuarioResponseDTO create(UsuarioCreateRequestDTO request) {
         String cpfLimpo = request.cpf() != null ? request.cpf().replaceAll("\\D", "") : null;
-        String nomeTratado = tratarNome(request.nome());
+        String nomeTratado = tratarTexto(request.nome());
 
         if (repository.existsByCpf(cpfLimpo))
             throw new ConflictException("CPF já cadastrado.");
@@ -50,14 +50,14 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
-    public UsuarioResponseDTO getUsuarioService(UUID id) {
+    public UsuarioResponseDTO findById(UUID id) {
         Usuario usuario = buscarUsuarioPorId(id);
 
         return UsuarioMapper.toDTOUsuario(usuario);
     }
 
     @Transactional
-    public UsuarioResponseDTO updateUsuarioService(UUID id, UsuarioUpdateRequestDTO request) {
+    public UsuarioResponseDTO update(UUID id, UsuarioUpdateRequestDTO request) {
         Usuario usuario = buscarUsuarioPorId(id);
 
         if (request.email() != null) {
@@ -67,7 +67,7 @@ public class UsuarioService {
             usuario.setEmail(request.email());
         }
 
-        if (request.nome() != null) usuario.setNome(tratarNome(request.nome()));
+        if (request.nome() != null) usuario.setNome(tratarTexto(request.nome()));
         if (request.celular() != null) usuario.setCelular(request.celular());
 
         usuario = repository.save(usuario);
@@ -76,7 +76,7 @@ public class UsuarioService {
     }
 
     @Transactional
-    public void deleteUsuarioService(UUID id) {
+    public void delete(UUID id) {
         Usuario usuario = buscarUsuarioPorId(id);
 
         repository.delete(usuario);
@@ -87,10 +87,10 @@ public class UsuarioService {
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado no sistema."));
     }
 
-    private String tratarNome(String nome) {
-        if (nome == null) {
+    private String tratarTexto(String texto) {
+        if (texto == null) {
             return null;
         }
-        return nome.trim().toUpperCase();
+        return texto.trim().toUpperCase();
     }
 }
