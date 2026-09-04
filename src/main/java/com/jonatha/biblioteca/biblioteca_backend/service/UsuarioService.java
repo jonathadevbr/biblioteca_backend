@@ -26,7 +26,7 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
-    public Page<UsuarioResponseDTO> getUsuarioPage(Pageable pageable) {
+    public Page<UsuarioResponseDTO> getPage(Pageable pageable) {
         return repository.findAll(pageable).map(UsuarioMapper::toDTOUsuario);
     }
 

@@ -10,10 +10,6 @@ import com.jonatha.biblioteca.biblioteca_backend.service.CategoriaService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -46,9 +42,9 @@ public class CategoriaController {
 
     @Operation(summary = "Busca todas as categorias do sistema.")
     @GetMapping
-    public Page<CategoriaResponseDTO> getCategoriaPage(
+    public Page<CategoriaResponseDTO> getPage(
         @Parameter(hidden = true) @PageableDefault(size = 10) Pageable pageable) {
-            return service.getCategoriaPage(pageable);
+            return service.getPage(pageable);
     }
 
     @Operation(summary = "Cria uma categoria nova no sistema.")

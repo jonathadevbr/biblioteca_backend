@@ -27,7 +27,7 @@ public class CategoriaService {
     }
 
     @Transactional(readOnly = true)
-    public Page<CategoriaResponseDTO> getCategoriaPage(Pageable pageable) {
+    public Page<CategoriaResponseDTO> getPage(Pageable pageable) {
         return repository.findAll(pageable).map(CategoriaMapper::toDTOCategoria);
     }
 

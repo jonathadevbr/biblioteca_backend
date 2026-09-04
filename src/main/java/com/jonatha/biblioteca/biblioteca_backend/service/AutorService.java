@@ -29,7 +29,7 @@ public class AutorService {
     }
 
     @Transactional(readOnly = true)
-    public Page<AutorResponseDTO> getAutorPage(Pageable pageable) {
+    public Page<AutorResponseDTO> getPage(Pageable pageable) {
         return repository.findAll(pageable).map(AutorMapper::toDTOAutor);
     }
 
