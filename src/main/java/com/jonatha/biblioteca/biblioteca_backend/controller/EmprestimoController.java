@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/biblioteca/emprestimo")
+@RequestMapping("/emprestimo")
 @Tag(name = "Emprestimo", description = "Endpoints para gerenciamento de emprestimos no sistema.")
 public class EmprestimoController {
     private final EmprestimoService service;
