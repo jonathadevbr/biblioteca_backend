@@ -39,7 +39,7 @@ public class AutorController {
     @Operation(summary = "Busca todos os autores do sistema.")
     @GetMapping
     public Page<AutorResponseDTO> getPage(@ParameterObject @PageableDefault(size = 10) Pageable pageable) {
-            return service.getPage(pageable);
+        return service.getPage(pageable);
     }
 
     @Operation(summary = "Cria um autor novo no sistema.")

@@ -9,12 +9,12 @@ import com.jonatha.biblioteca.biblioteca_backend.dto.response.CategoriaResponseD
 import com.jonatha.biblioteca.biblioteca_backend.service.CategoriaService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 import java.util.UUID;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -42,9 +42,8 @@ public class CategoriaController {
 
     @Operation(summary = "Busca todas as categorias do sistema.")
     @GetMapping
-    public Page<CategoriaResponseDTO> getPage(
-        @Parameter(hidden = true) @PageableDefault(size = 10) Pageable pageable) {
-            return service.getPage(pageable);
+    public Page<CategoriaResponseDTO> getPage(@ParameterObject @PageableDefault(size = 10) Pageable pageable) {
+        return service.getPage(pageable);
     }
 
     @Operation(summary = "Cria uma categoria nova no sistema.")

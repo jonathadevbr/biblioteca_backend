@@ -39,7 +39,7 @@ public class EmprestimoController {
     @Operation(summary = "Buscar todos os emprestimos do sistema.")
     @GetMapping
     public Page<EmprestimoResponseDTO> getPage(@ParameterObject @PageableDefault(size = 10) Pageable pageable) {
-            return service.getPage(pageable);
+        return service.getPage(pageable);
     }
 
     @PostMapping

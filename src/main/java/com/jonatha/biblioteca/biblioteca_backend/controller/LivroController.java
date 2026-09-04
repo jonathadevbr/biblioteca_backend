@@ -35,7 +35,7 @@ public class LivroController {
     @Operation(summary = "Buscar todos os livros do sistema.")
     @GetMapping
     public Page<LivroResponseDTO> getPage(@ParameterObject @PageableDefault(size = 10) Pageable pageable) {
-            return service.getPage(pageable);
+        return service.getPage(pageable);
     }
 
     @PostMapping

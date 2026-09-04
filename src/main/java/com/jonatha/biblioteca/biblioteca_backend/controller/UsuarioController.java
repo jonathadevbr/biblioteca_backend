@@ -9,12 +9,12 @@ import com.jonatha.biblioteca.biblioteca_backend.dto.response.UsuarioResponseDTO
 import com.jonatha.biblioteca.biblioteca_backend.service.UsuarioService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 import java.util.UUID;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -39,9 +39,8 @@ public class UsuarioController {
 
     @Operation(summary = "Busca todos os usuários do sistema.")
     @GetMapping
-    public Page<UsuarioResponseDTO> getPage(
-        @Parameter(hidden = true) @PageableDefault(size = 10) Pageable pageable){
-            return service.getPage(pageable);
+    public Page<UsuarioResponseDTO> getPage(@ParameterObject @PageableDefault(size = 10) Pageable pageable){
+        return service.getPage(pageable);
     }
 
     @Operation(summary = "Cria um usuário novo no sistema.")
