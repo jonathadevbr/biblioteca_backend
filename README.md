@@ -25,8 +25,8 @@
 
 Este projeto foi desenvolvido utilizando as seguintes tecnologias:
 
-* Java 17
-* Spring Boot 3.x
+* Java 21
+* Spring Boot 4.0.6
 * Spring Data JPA
 * PostgreSQL
 * Maven
