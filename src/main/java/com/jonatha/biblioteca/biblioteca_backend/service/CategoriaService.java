@@ -1,6 +1,5 @@
 package com.jonatha.biblioteca.biblioteca_backend.service;
 
-import java.util.Locale;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
