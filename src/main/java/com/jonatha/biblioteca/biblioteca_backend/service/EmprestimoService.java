@@ -38,12 +38,12 @@ public class EmprestimoService {
     }
 
     @Transactional(readOnly = true)
-    public Page<EmprestimoResponseDTO> getAllEmprestimoService(Pageable pageable) {
+    public Page<EmprestimoResponseDTO> getPage(Pageable pageable) {
         return repository.findAll(pageable).map(EmprestimoMapper::toDTOEmprestimo);
     }
 
     @Transactional
-    public EmprestimoResponseDTO createEmprestimoSerivce(EmprestimoCreateRequestDTO request) {
+    public EmprestimoResponseDTO create(EmprestimoCreateRequestDTO request) {
         Set<Livro> livros = new HashSet<>(livroRepository.findAllById(request.idsLivro()));
 
         if (livros.isEmpty()) {
@@ -60,13 +60,13 @@ public class EmprestimoService {
     }
 
     @Transactional(readOnly = true)
-    public EmprestimoResponseDTO getEmprestimoService(UUID id) {
+    public EmprestimoResponseDTO findById(UUID id) {
         Emprestimo emprestimo = buscarEmprestimoPorId(id);
         return EmprestimoMapper.toDTOEmprestimo(emprestimo);
     }
 
     @Transactional
-    public EmprestimoResponseDTO updateEmprestimoService(UUID id, EmprestimoUpdateRequestDTO request) {
+    public EmprestimoResponseDTO update(UUID id, EmprestimoUpdateRequestDTO request) {
         Emprestimo emprestimo = buscarEmprestimoPorId(id);
 
         if (request.idUsuario() != null) {
@@ -105,7 +105,7 @@ public class EmprestimoService {
     }
 
     @Transactional
-    public void deleteEmprestimoService(UUID id) {
+    public void delete(UUID id) {
         Emprestimo emprestimo = buscarEmprestimoPorId(id);
         repository.delete(emprestimo);
     }
