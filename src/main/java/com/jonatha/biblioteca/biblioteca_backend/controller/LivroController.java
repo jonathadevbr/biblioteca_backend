@@ -10,15 +10,11 @@ import com.jonatha.biblioteca.biblioteca_backend.dto.response.LivroResponseDTO;
 import com.jonatha.biblioteca.biblioteca_backend.service.LivroService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.UUID;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -27,102 +23,44 @@ import org.springframework.http.HttpStatus;
 
 
 @RestController
-@RequestMapping("/v2/biblioteca/livro")
+@RequestMapping("/livro")
 @Tag(name = "Livro", description = "Endpoints para gerenciamento de livros no sistema.")
 public class LivroController {
-    private final LivroService livroService;
+    private final LivroService service;
 
-    public LivroController(LivroService livroService) {
-        this.livroService = livroService;
+    public LivroController(LivroService service) {
+        this.service = service;
     }
 
-    // GET ALL
     @Operation(summary = "Buscar todos os livros do sistema.")
-    @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Livros listados com sucesso."),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Erro interno de servidor.",
-            content = @Content(schema = @Schema(hidden = true)))
-    })
     @GetMapping
-    public Page<LivroResponseDTO> getAllLivroController(
-        @Parameter(hidden = true) @PageableDefault(size = 10) Pageable pageable) {
-            return livroService.getAllLivroService(pageable);
+    public Page<LivroResponseDTO> getPage(@ParameterObject @PageableDefault(size = 10) Pageable pageable) {
+            return service.getPage(pageable);
     }
 
-    // POST
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public LivroResponseDTO createLivroController(@Valid @RequestBody LivroCreateRequestDTO request) {
-        return livroService.createLivroService(request);
+    public LivroResponseDTO create(@Valid @RequestBody LivroCreateRequestDTO request) {
+        return service.create(request);
     }
 
-    // GET
     @Operation(summary = "Buscar um livro por ID no sistema.")
-    @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Livro encontrado com sucesso."),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Livro não encontrado na base de dados.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Livro não encontrado no sistema."))),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Erro interno de servidor.",
-            content = @Content(schema = @Schema(hidden = true)))
-    })
     @GetMapping("/{id}")
-    public LivroResponseDTO getLivroController(@Valid @PathVariable UUID id) {
-        return livroService.getLivroService(id);
+    public LivroResponseDTO findById(@Valid @PathVariable UUID id) {
+        return service.findById(id);
     }
     
-    // PUT
     @Operation(summary = "Atualizar um livro já registrado no sistema.")
-    @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Livro atualizado com sucesso."),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Dados inválidos fornecidos na requisição.",
-            content = @Content(schema = @Schema(hidden = true))),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Livro não encontrado na base de dados.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Livro não encontrado no sistema."))),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Erro interno de servidor.",
-            content = @Content(schema = @Schema(hidden = true)))
-    })
     @PutMapping("/{id}")
-    public LivroResponseDTO updateLivroController(@PathVariable UUID id, @RequestBody LivroUpdateRequestDTO request) {        
-        return livroService.updateLivroService(id, request);
+    public LivroResponseDTO update(@PathVariable UUID id, @RequestBody LivroUpdateRequestDTO request) {        
+        return service.update(id, request);
     }
 
-    // DELETE
     @Operation(summary = "Deletar um livro já registrado no sistema.")
-    @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "Livro deletado com sucesso."),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Livro não encontrado na base de dados.",
-            content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "Livro não encontrado no sistema."))),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Erro interno de servidor.",
-            content = @Content(schema = @Schema(hidden = true)))
-    })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteLivroController(@PathVariable UUID id) {
-        livroService.deleteLivroService(id);
+    public void delete(@PathVariable UUID id) {
+        service.delete(id);
     }
     
 }

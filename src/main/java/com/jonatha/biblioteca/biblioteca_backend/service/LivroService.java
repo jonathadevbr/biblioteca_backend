@@ -42,14 +42,14 @@ public class LivroService {
     }
 
     @Transactional(readOnly = true)
-    public Page<LivroResponseDTO> getAllLivroService(Pageable pageable) {
+    public Page<LivroResponseDTO> getPage(Pageable pageable) {
         return repository.findAll(pageable).map(LivroMapper::toDTOLivro);
     }
 
     @Transactional
-    public LivroResponseDTO createLivroService(LivroCreateRequestDTO request) {
+    public LivroResponseDTO create(LivroCreateRequestDTO request) {
         String isbnLimpo = request.isbn() != null ? request.isbn().replaceAll("\\D", "") : null;
-        String tituloTratado = tratarTitulo(request.titulo());
+        String tituloTratado = tratarTexto(request.titulo());
 
         if (repository.existsByTitulo(request.titulo())) throw new ConflictException("Título já cadastrado.");
         if (repository.existsByIsbn(isbnLimpo)) throw new ConflictException("ISBN já cadastrado.");
@@ -74,17 +74,17 @@ public class LivroService {
     }
 
     @Transactional(readOnly = true)
-    public LivroResponseDTO getLivroService(UUID id) {
+    public LivroResponseDTO findById(UUID id) {
         Livro livro = buscarLivroPorId(id);
 
         return LivroMapper.toDTOLivro(livro);
     }
 
     @Transactional
-    public LivroResponseDTO updateLivroService(UUID id, LivroUpdateRequestDTO request) {
+    public LivroResponseDTO update(UUID id, LivroUpdateRequestDTO request) {
         Livro livro = buscarLivroPorId(id);
 
-        if (request.titulo() != null) livro.setTitulo(tratarTitulo(request.titulo()));
+        if (request.titulo() != null) livro.setTitulo(tratarTexto(request.titulo()));
 
         if (request.idsAutores() != null) {
             Set<Autor> autores = new HashSet<>(autorRepository.findAllById(request.idsAutores()));
@@ -103,7 +103,7 @@ public class LivroService {
         }
 
         if (request.anoPublicacao() != null) livro.setAnoPublicacao(request.anoPublicacao());
-        if (request.editora() != null) livro.setEditora(tratarEditora(request.editora()));
+        if (request.editora() != null) livro.setEditora(tratarTexto(request.editora()));
         if (request.quantidade() != null) livro.setQuantidade(request.quantidade());
 
         livro = repository.save(livro);
@@ -111,7 +111,7 @@ public class LivroService {
     }
 
     @Transactional
-    public void deleteLivroService(UUID id) {
+    public void delete(UUID id) {
         Livro livro = buscarLivroPorId(id);
 
         repository.delete(livro);
@@ -122,13 +122,8 @@ public class LivroService {
             .orElseThrow(() -> new NotFoundException("Livro não encontrado no sistema."));
     }
 
-    private String tratarTitulo(String titulo) {
-        if (titulo == null) return null;
-        return titulo.trim().toUpperCase();
-    }
-
-    private String tratarEditora(String editora) {
-        if (editora == null) return null;
-        return editora.trim().toUpperCase();
+    private String tratarTexto(String texto) {
+        if (texto == null) return null;
+        return texto.trim().toUpperCase();
     }
 }
