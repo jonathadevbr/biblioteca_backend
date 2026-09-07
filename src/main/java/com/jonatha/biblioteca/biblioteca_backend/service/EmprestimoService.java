@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.emprestimo.EmprestimoCreateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.emprestimo.EmprestimoUpdateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.response.EmprestimoResponseDTO;
+import com.jonatha.biblioteca.biblioteca_backend.enums.StatusEmprestimo;
 import com.jonatha.biblioteca.biblioteca_backend.exception.NotFoundException;
 import com.jonatha.biblioteca.biblioteca_backend.mapper.EmprestimoMapper;
 import com.jonatha.biblioteca.biblioteca_backend.model.Emprestimo;
@@ -54,6 +55,8 @@ public class EmprestimoService {
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
 
         Emprestimo emprestimo = EmprestimoMapper.toEntityEmprestimo(request, usuario, livros);
+
+        emprestimo.setStatus(StatusEmprestimo.ATIVO);
 
         emprestimo = repository.save(emprestimo);
         return EmprestimoMapper.toDTOEmprestimo(emprestimo);
