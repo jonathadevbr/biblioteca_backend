@@ -24,6 +24,5 @@ public record EmprestimoCreateRequestDTO(
 
     LocalDate dataDevolucaoReal,
 
-    // @NotNull(message = "O tipo de status do empréstimo é obrigatório.")
     StatusEmprestimo status
 ) { }
