@@ -61,7 +61,7 @@ public class CategoriaController {
 
     @Operation(summary = "Atualizar uma categoria já registrada no sistema.")
     @PutMapping("/{id}")
-    public CategoriaResponseDTO updateCategoriaController(@PathVariable UUID id, @Valid @RequestBody CategoriaUpdateRequestDTO request) {        
+    public CategoriaResponseDTO update(@PathVariable UUID id, @Valid @RequestBody CategoriaUpdateRequestDTO request) {        
         return service.update(id, request);
     }
 
