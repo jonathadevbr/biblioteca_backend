@@ -45,10 +45,14 @@ public class EmprestimoService {
 
     @Transactional
     public EmprestimoResponseDTO create(EmprestimoCreateRequestDTO request) {
-        Set<Livro> livros = new HashSet<>(livroRepository.findAllById(request.idsLivro()));
+        Set<Livro> livros = new HashSet<>();
 
-        if (livros.isEmpty()) {
-            throw new NotFoundException("Nenhum livro válido foi encontrado para os IDs informados.");
+        if (request.idsLivro() != null) {
+            livros = new HashSet<>(livroRepository.findAllById(request.idsLivro()));
+            
+            if (livros.size() != new HashSet<>(request.idsLivro()).size()) {
+                throw new NotFoundException("Um ou mais livros não foram encontrados.");
+            }
         }
 
         Usuario usuario = usuarioRepository.findById(request.idUsuario())
