@@ -8,4 +8,5 @@ import com.jonatha.biblioteca.biblioteca_backend.model.Emprestimo;
 
 public interface EmprestimoRepository extends JpaRepository<Emprestimo, UUID> {
     boolean existsByUsuarioId(UUID id);
+    boolean existsByLivrosId(UUID id);
 }

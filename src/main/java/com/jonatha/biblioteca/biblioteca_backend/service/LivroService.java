@@ -21,6 +21,7 @@ import com.jonatha.biblioteca.biblioteca_backend.model.Categoria;
 import com.jonatha.biblioteca.biblioteca_backend.model.Livro;
 import com.jonatha.biblioteca.biblioteca_backend.repository.AutorRepository;
 import com.jonatha.biblioteca.biblioteca_backend.repository.CategoriaRepository;
+import com.jonatha.biblioteca.biblioteca_backend.repository.EmprestimoRepository;
 import com.jonatha.biblioteca.biblioteca_backend.repository.LivroRepository;
 
 
@@ -30,15 +31,18 @@ public class LivroService {
     private final LivroRepository repository;
     private final AutorRepository autorRepository;
     private final CategoriaRepository categoriaRepository;
+    private final EmprestimoRepository emprestimoRepository;
 
     public LivroService(
         LivroRepository repository,
         AutorRepository autorRepository,
-        CategoriaRepository categoriaRepository
+        CategoriaRepository categoriaRepository,
+        EmprestimoRepository emprestimoRepository
     ) {
         this.repository = repository;
         this.autorRepository = autorRepository;
         this.categoriaRepository = categoriaRepository;
+        this.emprestimoRepository = emprestimoRepository;
     }
 
     @Transactional(readOnly = true)
@@ -113,6 +117,10 @@ public class LivroService {
     @Transactional
     public void delete(UUID id) {
         Livro livro = buscarLivroPorId(id);
+
+        if (emprestimoRepository.existsByLivrosId(id)) {
+            throw new ConflictException("Não é possível excluir o Livro pois há emprestimos vinculados a ele.");
+        }
 
         repository.delete(livro);
     }
