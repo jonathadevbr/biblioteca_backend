@@ -14,15 +14,18 @@ import com.jonatha.biblioteca.biblioteca_backend.exception.ConflictException;
 import com.jonatha.biblioteca.biblioteca_backend.exception.NotFoundException;
 import com.jonatha.biblioteca.biblioteca_backend.mapper.UsuarioMapper;
 import com.jonatha.biblioteca.biblioteca_backend.model.Usuario;
+import com.jonatha.biblioteca.biblioteca_backend.repository.EmprestimoRepository;
 import com.jonatha.biblioteca.biblioteca_backend.repository.UsuarioRepository;
 
 @Service
 public class UsuarioService {
 
     private final UsuarioRepository repository;
+    private final EmprestimoRepository emprestimoRepository;
 
-    public UsuarioService(UsuarioRepository repository) {
+    public UsuarioService(UsuarioRepository repository, EmprestimoRepository emprestimoRepository) {
         this.repository = repository;
+        this.emprestimoRepository = emprestimoRepository;
     }
 
     @Transactional(readOnly = true)
@@ -78,6 +81,10 @@ public class UsuarioService {
     @Transactional
     public void delete(UUID id) {
         Usuario usuario = buscarUsuarioPorId(id);
+
+        if (emprestimoRepository.existsByUsuarioId(id)) {
+            throw new ConflictException("Não é possível excluir o usuário pois há emprestimos vinculados a ele.");
+        }
 
         repository.delete(usuario);
     }
