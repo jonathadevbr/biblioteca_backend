@@ -15,14 +15,17 @@ import com.jonatha.biblioteca.biblioteca_backend.exception.NotFoundException;
 import com.jonatha.biblioteca.biblioteca_backend.mapper.CategoriaMapper;
 import com.jonatha.biblioteca.biblioteca_backend.model.Categoria;
 import com.jonatha.biblioteca.biblioteca_backend.repository.CategoriaRepository;
+import com.jonatha.biblioteca.biblioteca_backend.repository.LivroRepository;
 
 @Service
 public class CategoriaService {
 
     private final CategoriaRepository repository;
+    private final LivroRepository livroRepository;
 
-    public CategoriaService(CategoriaRepository repository) {
+    public CategoriaService(CategoriaRepository repository, LivroRepository livroRepository) {
         this.repository = repository;
+        this.livroRepository = livroRepository;
     }
 
     @Transactional(readOnly = true)
@@ -89,6 +92,10 @@ public class CategoriaService {
     @Transactional
     public void delete(UUID id) {
         Categoria categoria = buscarCategoriaPorId(id);
+
+        if (livroRepository.existsByCategoriaId(id)) {
+            throw new ConflictException("Não é possível excluir o categorias pois há livros vinculados a ela.");
+        }
 
         repository.delete(categoria);
     }
