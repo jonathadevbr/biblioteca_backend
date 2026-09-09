@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 public record LivroCreateRequestDTO(
@@ -16,7 +17,7 @@ public record LivroCreateRequestDTO(
     @Size(max = 100, message = "O título do livro deve ter no máximo 100 caracteres.")
     String titulo,
 
-    @NotNull(message = "O autor do livro é obrigatório.")
+    @NotEmpty(message = "O autor do livro é obrigatório.")
     List<UUID> idsAutores,
 
     @NotNull(message = "A categoria do livro é obrigatória.")

@@ -52,7 +52,7 @@ public class LivroController {
     
     @Operation(summary = "Atualizar um livro já registrado no sistema.")
     @PutMapping("/{id}")
-    public LivroResponseDTO update(@PathVariable UUID id, @RequestBody LivroUpdateRequestDTO request) {        
+    public LivroResponseDTO update(@PathVariable UUID id,@Valid  @RequestBody LivroUpdateRequestDTO request) {        
         return service.update(id, request);
     }
 
