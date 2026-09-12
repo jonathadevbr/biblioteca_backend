@@ -33,7 +33,7 @@ import lombok.Setter;
 public class Emprestimo {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id_emprestimo", nullable = false, updatable = false)
+    @Column(name = "id_emprestimo", nullable = false, updatable = false, columnDefinition = "uuid DEFAULT gen_random_uuid()")
     private UUID id;
 
     @ManyToOne

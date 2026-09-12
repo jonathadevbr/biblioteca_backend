@@ -19,7 +19,7 @@ import lombok.Setter;
 public class Autor {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id_autor", nullable = false, updatable = false)
+    @Column(name = "id_autor", nullable = false, updatable = false, columnDefinition = "uuid DEFAULT gen_random_uuid()")
     private UUID id;
 
     @Column(name = "nome", nullable = false, length = 255)
