@@ -16,6 +16,7 @@ import com.jonatha.biblioteca.biblioteca_backend.mapper.UsuarioMapper;
 import com.jonatha.biblioteca.biblioteca_backend.model.Usuario;
 import com.jonatha.biblioteca.biblioteca_backend.repository.EmprestimoRepository;
 import com.jonatha.biblioteca.biblioteca_backend.repository.UsuarioRepository;
+import com.jonatha.biblioteca.biblioteca_backend.utils.TextUtils;
 
 @Service
 public class UsuarioService {
@@ -36,7 +37,7 @@ public class UsuarioService {
     @Transactional
     public UsuarioResponseDTO create(UsuarioCreateRequestDTO request) {
         String cpfLimpo = request.cpf() != null ? request.cpf().replaceAll("\\D", "") : null;
-        String nomeTratado = tratarTexto(request.nome());
+        String nomeTratado = TextUtils.tratarTexto(request.nome());
 
         if (repository.existsByCpf(cpfLimpo))
             throw new ConflictException("CPF já cadastrado.");
@@ -70,7 +71,7 @@ public class UsuarioService {
             usuario.setEmail(request.email());
         }
 
-        if (request.nome() != null) usuario.setNome(tratarTexto(request.nome()));
+        if (request.nome() != null) usuario.setNome(TextUtils.tratarTexto(request.nome()));
         if (request.celular() != null) usuario.setCelular(request.celular());
 
         usuario = repository.save(usuario);
@@ -92,12 +93,5 @@ public class UsuarioService {
     private Usuario buscarUsuarioPorId(UUID id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado no sistema."));
-    }
-
-    private String tratarTexto(String texto) {
-        if (texto == null) {
-            return null;
-        }
-        return texto.trim().toUpperCase();
     }
 }

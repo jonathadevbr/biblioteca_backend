@@ -16,6 +16,7 @@ import com.jonatha.biblioteca.biblioteca_backend.mapper.CategoriaMapper;
 import com.jonatha.biblioteca.biblioteca_backend.model.Categoria;
 import com.jonatha.biblioteca.biblioteca_backend.repository.CategoriaRepository;
 import com.jonatha.biblioteca.biblioteca_backend.repository.LivroRepository;
+import com.jonatha.biblioteca.biblioteca_backend.utils.TextUtils;
 
 @Service
 public class CategoriaService {
@@ -37,8 +38,8 @@ public class CategoriaService {
     public CategoriaResponseDTO create(CategoriaCreateRequestDTO request) {
         Categoria categoria = CategoriaMapper.toEntityCategoria(request);
 
-        String nomeTratado = tratarTexto(categoria.getNome());
-        String descricaoTratada = tratarTexto(categoria.getDescricao());
+        String nomeTratado = TextUtils.tratarTexto(categoria.getNome());
+        String descricaoTratada = TextUtils.tratarTexto(categoria.getDescricao());
 
         if (repository.existsByNome(nomeTratado)) {
             throw new ConflictException("Nome de categoria já cadastrado.");
@@ -66,8 +67,8 @@ public class CategoriaService {
     public CategoriaResponseDTO update(UUID id, CategoriaUpdateRequestDTO request) {
         Categoria categoria = buscarCategoriaPorId(id);
 
-        String nomeTratado = tratarTexto(request.nome());
-        String descricaoTratada = tratarTexto(request.descricao());
+        String nomeTratado = TextUtils.tratarTexto(request.nome());
+        String descricaoTratada = TextUtils.tratarTexto(request.descricao());
 
         if (nomeTratado != null && repository.existsByNomeAndIdNot(nomeTratado, id)) {
             throw new ConflictException("Nome de categoria já cadastrado.");
@@ -103,11 +104,5 @@ public class CategoriaService {
     private Categoria buscarCategoriaPorId(UUID id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Categoria não encontrada no sistema."));
-    }
-
-    private String tratarTexto(String texto) {
-        if (texto == null)
-            return null;
-        return texto.trim().toUpperCase();
     }
 }

@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import com.jonatha.biblioteca.biblioteca_backend.exception.ConflictException;
 import com.jonatha.biblioteca.biblioteca_backend.repository.LivroRepository;
+import com.jonatha.biblioteca.biblioteca_backend.utils.TextUtils;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -37,8 +39,8 @@ public class AutorService {
     public AutorResponseDTO create(AutorCreateRequestDTO request) {
         Autor autor = AutorMapper.toEntityAutor(request);
 
-        autor.setNome(tratarTexto(autor.getNome()));
-        autor.setNacionalidade(tratarTexto(autor.getNacionalidade()));
+        autor.setNome(TextUtils.tratarTexto(autor.getNome()));
+        autor.setNacionalidade(TextUtils.tratarTexto(autor.getNacionalidade()));
 
         autor = repository.save(autor);
         return AutorMapper.toDTOAutor(autor);
@@ -56,11 +58,11 @@ public class AutorService {
         Autor autor = buscarAutorPorId(id);
 
         if (request.nome() != null) {
-            autor.setNome(tratarTexto(request.nome()));
+            autor.setNome(TextUtils.tratarTexto(request.nome()));
         }
 
         if (request.nacionalidade() != null) {
-            autor.setNacionalidade(tratarTexto(request.nacionalidade()));
+            autor.setNacionalidade(TextUtils.tratarTexto(request.nacionalidade()));
         }
 
         autor = repository.save(autor);
@@ -81,11 +83,5 @@ public class AutorService {
     private Autor buscarAutorPorId(UUID id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Autor não encontrado no sistema."));
-    }
-
-    private String tratarTexto(String texto) {
-        if (texto == null)
-            return null;
-        return texto.trim().toUpperCase();
     }
 }

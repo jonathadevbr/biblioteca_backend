@@ -23,6 +23,7 @@ import com.jonatha.biblioteca.biblioteca_backend.repository.AutorRepository;
 import com.jonatha.biblioteca.biblioteca_backend.repository.CategoriaRepository;
 import com.jonatha.biblioteca.biblioteca_backend.repository.EmprestimoRepository;
 import com.jonatha.biblioteca.biblioteca_backend.repository.LivroRepository;
+import com.jonatha.biblioteca.biblioteca_backend.utils.TextUtils;
 
 
 @Service
@@ -53,7 +54,7 @@ public class LivroService {
     @Transactional
     public LivroResponseDTO create(LivroCreateRequestDTO request) {
         String isbnLimpo = request.isbn() != null ? request.isbn().replaceAll("\\D", "") : null;
-        String tituloTratado = tratarTexto(request.titulo());
+        String tituloTratado = TextUtils.tratarTexto(request.titulo());
 
         if (repository.existsByTitulo(request.titulo())) throw new ConflictException("Título já cadastrado.");
         if (repository.existsByIsbn(isbnLimpo)) throw new ConflictException("ISBN já cadastrado.");
@@ -88,7 +89,7 @@ public class LivroService {
     public LivroResponseDTO update(UUID id, LivroUpdateRequestDTO request) {
         Livro livro = buscarLivroPorId(id);
 
-        if (request.titulo() != null) livro.setTitulo(tratarTexto(request.titulo()));
+        if (request.titulo() != null) livro.setTitulo(TextUtils.tratarTexto(request.titulo()));
 
         if (request.idsAutores() != null) {
             Set<Autor> autores = new HashSet<>(autorRepository.findAllById(request.idsAutores()));
@@ -107,7 +108,7 @@ public class LivroService {
         }
 
         if (request.anoPublicacao() != null) livro.setAnoPublicacao(request.anoPublicacao());
-        if (request.editora() != null) livro.setEditora(tratarTexto(request.editora()));
+        if (request.editora() != null) livro.setEditora(TextUtils.tratarTexto(request.editora()));
         if (request.quantidade() != null) livro.setQuantidade(request.quantidade());
 
         livro = repository.save(livro);
@@ -128,10 +129,5 @@ public class LivroService {
     private Livro buscarLivroPorId(UUID id) {
         return repository.findById(id)
             .orElseThrow(() -> new NotFoundException("Livro não encontrado no sistema."));
-    }
-
-    private String tratarTexto(String texto) {
-        if (texto == null) return null;
-        return texto.trim().toUpperCase();
     }
 }
