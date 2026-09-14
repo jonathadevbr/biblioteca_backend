@@ -13,6 +13,7 @@ import com.jonatha.biblioteca.biblioteca_backend.dto.request.emprestimo.Empresti
 import com.jonatha.biblioteca.biblioteca_backend.dto.request.emprestimo.EmprestimoUpdateRequestDTO;
 import com.jonatha.biblioteca.biblioteca_backend.dto.response.EmprestimoResponseDTO;
 import com.jonatha.biblioteca.biblioteca_backend.enums.StatusEmprestimo;
+import com.jonatha.biblioteca.biblioteca_backend.exception.ConflictException;
 import com.jonatha.biblioteca.biblioteca_backend.exception.NotFoundException;
 import com.jonatha.biblioteca.biblioteca_backend.mapper.EmprestimoMapper;
 import com.jonatha.biblioteca.biblioteca_backend.model.Emprestimo;
@@ -47,19 +48,27 @@ public class EmprestimoService {
     public EmprestimoResponseDTO create(EmprestimoCreateRequestDTO request) {
         Set<Livro> livros = new HashSet<>();
 
-        if (request.idsLivro() != null) {
+        if (request.idsLivro() != null && !request.idsLivro().isEmpty()) {
             livros = new HashSet<>(livroRepository.findAllById(request.idsLivro()));
-            
+
             if (livros.size() != new HashSet<>(request.idsLivro()).size()) {
                 throw new NotFoundException("Um ou mais livros não foram encontrados.");
             }
+
+            for (Livro livro : livros) {
+                if (livro.getQuantidade() == null || livro.getQuantidade() <= 0) {
+                    throw new ConflictException("O livro '" + livro.getTitulo() + "' não possui exemplar disponível em estoque.");
+                }
+                livro.setQuantidade(livro.getQuantidade() - 1);
+            }
+
+            livroRepository.saveAll(livros);
         }
 
         Usuario usuario = usuarioRepository.findById(request.idUsuario())
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
 
         Emprestimo emprestimo = EmprestimoMapper.toEntityEmprestimo(request, usuario, livros);
-
         emprestimo.setStatus(StatusEmprestimo.ATIVO);
 
         emprestimo = repository.save(emprestimo);
@@ -104,6 +113,12 @@ public class EmprestimoService {
         }
 
         if (request.status() != null) {
+            if (request.status() == StatusEmprestimo.DEVOLVIDO && emprestimo.getStatus() != StatusEmprestimo.DEVOLVIDO) {
+                for (Livro livro : emprestimo.getLivros()) {
+                    livro.setQuantidade(livro.getQuantidade() + 1);
+                }
+                livroRepository.saveAll(emprestimo.getLivros());
+            }
             emprestimo.setStatus(request.status());
         }
 
