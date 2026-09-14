@@ -56,7 +56,7 @@ public class LivroService {
         String isbnLimpo = request.isbn() != null ? request.isbn().replaceAll("\\D", "") : null;
         String tituloTratado = TextUtils.tratarTexto(request.titulo());
 
-        if (repository.existsByTitulo(request.titulo())) throw new ConflictException("Título já cadastrado.");
+        if (repository.existsByTituloIgnoreCase(request.titulo())) throw new ConflictException("Título já cadastrado.");
         if (repository.existsByIsbn(isbnLimpo)) throw new ConflictException("ISBN já cadastrado.");
         
 
@@ -89,7 +89,25 @@ public class LivroService {
     public LivroResponseDTO update(UUID id, LivroUpdateRequestDTO request) {
         Livro livro = buscarLivroPorId(id);
 
-        if (request.titulo() != null) livro.setTitulo(TextUtils.tratarTexto(request.titulo()));
+        if (request.titulo() != null) {
+            String tituloTratado = TextUtils.tratarTexto(request.titulo());
+
+            if (repository.existsByTituloIgnoreCaseAndIdNot(tituloTratado, id)) {
+                throw new ConflictException("Título já cadastrado.");
+            }
+
+            livro.setTitulo(tituloTratado);
+        }
+
+        if (request.isbn() != null) {
+            String isbnLimpo = request.isbn().replaceAll("\\D", "");
+
+            if (repository.existsByIsbnAndIdNot(isbnLimpo, id)) {
+                throw new ConflictException("ISBN já cadastrado.");
+            }
+
+            livro.setIsbn(isbnLimpo);
+        }
 
         if (request.idsAutores() != null) {
             Set<Autor> autores = new HashSet<>(autorRepository.findAllById(request.idsAutores()));
