@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.jonatha.biblioteca.biblioteca_backend.model.Categoria;
 
 public interface CategoriaRepository extends JpaRepository<Categoria, UUID> {
-    boolean existsByNome(String nome);
-    boolean existsByDescricao(String descricao);
-    boolean existsByNomeAndIdNot(String nome, UUID id);
-    boolean existsByDescricaoAndIdNot(String descricao, UUID id);
+    boolean existsByNomeIgnoreCase(String nome);
+    boolean existsByDescricaoIgnoreCase(String descricao);
+    boolean existsByNomeIgnoreCaseAndIdNot(String nome, UUID id);
+    boolean existsByDescricaoIgnoreCaseAndIdNot(String descricao, UUID id);
 }

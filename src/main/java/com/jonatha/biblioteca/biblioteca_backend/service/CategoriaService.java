@@ -41,11 +41,11 @@ public class CategoriaService {
         String nomeTratado = TextUtils.tratarTexto(categoria.getNome());
         String descricaoTratada = TextUtils.tratarTexto(categoria.getDescricao());
 
-        if (repository.existsByNome(nomeTratado)) {
+        if (repository.existsByNomeIgnoreCase(nomeTratado)) {
             throw new ConflictException("Nome de categoria já cadastrado.");
         }
 
-        if (repository.existsByDescricao(descricaoTratada)) {
+        if (repository.existsByDescricaoIgnoreCase(descricaoTratada)) {
             throw new ConflictException("Descrição da categoria já cadastrada.");
         }
 
@@ -70,11 +70,11 @@ public class CategoriaService {
         String nomeTratado = TextUtils.tratarTexto(request.nome());
         String descricaoTratada = TextUtils.tratarTexto(request.descricao());
 
-        if (nomeTratado != null && repository.existsByNomeAndIdNot(nomeTratado, id)) {
+        if (nomeTratado != null && repository.existsByNomeIgnoreCaseAndIdNot(nomeTratado, id)) {
             throw new ConflictException("Nome de categoria já cadastrado.");
         }
 
-        if (descricaoTratada != null && repository.existsByDescricaoAndIdNot(descricaoTratada, id)) {
+        if (descricaoTratada != null && repository.existsByDescricaoIgnoreCaseAndIdNot(descricaoTratada, id)) {
             throw new ConflictException("Descrição da categoria já cadastrada.");
         }
 
