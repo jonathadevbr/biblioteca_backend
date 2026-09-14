@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -28,13 +28,13 @@ public record LivroCreateRequestDTO(
     String isbn,
 
     @NotNull(message = "O ano de publicação do livro é obrigatório.")
-    @Positive(message = "O ano de publicação do livro deve ser maior que zero.")
+    @PositiveOrZero(message = "O ano de publicação do livro deve ser maior que zero.")
     Integer anoPublicacao,
 
     @NotBlank(message = "A editora do livro é obrigatória.")
     String editora,
 
     @NotNull(message = "A quantidade de livros é obrigatório.")
-    @Positive(message = "A quantidade deve ser maior que zero.")
+    @PositiveOrZero(message = "A quantidade deve ser maior que zero.")
     Integer quantidade
 ) { }
